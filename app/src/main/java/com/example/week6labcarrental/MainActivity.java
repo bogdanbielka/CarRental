@@ -4,6 +4,7 @@ package com.example.week6labcarrental;
  * Author Fred
  * Bogdan
  * JP
+ * Fred
  */
 
 import android.support.v7.app.AppCompatActivity;
