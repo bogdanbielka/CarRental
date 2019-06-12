@@ -1,6 +1,7 @@
 package com.example.week6labcarrental;
 /**
  * Gruop name Eric
+ * Fred
  */
 
 import android.support.v7.app.AppCompatActivity;
