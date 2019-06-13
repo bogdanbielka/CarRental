@@ -11,9 +11,18 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.week6labcarrental.R;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class PopUp {
-    public static void openRegisterPopup(final Dialog dialog, final Context context, final ProgressDialog progressDialog) {
+    /**
+     * This function open a popup for user to register a new account
+     *
+     * @param dialog
+     * @param context
+     * @param progressDialog
+     * @param mAuth
+     */
+    public static void openRegisterPopup(final Dialog dialog, final Context context, final ProgressDialog progressDialog, final FirebaseAuth mAuth) {
 
         dialog.setContentView(R.layout.register_popup);
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
@@ -53,8 +62,8 @@ public class PopUp {
                 }
                 progressDialog.setMessage("Register...");
                 progressDialog.show();
-
-                // registerUser(emailString, userName,  pw, pw1);
+                //Register new user
+                Authentication.registerNewUser(context, mAuth, progressDialog,emailString, pw);
 
             }
         });
