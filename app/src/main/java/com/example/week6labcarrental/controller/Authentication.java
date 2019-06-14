@@ -42,7 +42,8 @@ public class Authentication {
                             user.put("userId", userInfo.getUid());
                             user.put("fullName", fullName);
                             user.put("email", email);
-                            addNewUserToFirebase(db, user);
+                            user.put("role", 1); // Set default role to 1 (User Role)
+                            addNewUserToFirebase(db, user, userInfo.getUid());
                             progressDialog.hide();
                             dialog.dismiss();
                             Toast.makeText(context, "Successfully register!", Toast.LENGTH_SHORT).show();
@@ -86,22 +87,22 @@ public class Authentication {
                     }
                 });
     }
-    public static void addNewUserToFirebase(FirebaseFirestore db, Map<String, Object> user) {
-
+    public static void addNewUserToFirebase(FirebaseFirestore db, Map<String, Object> user, String userId) {
 
         // Add a new document with a generated ID
         db.collection("users")
-                .add(user)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                .document(userId)
+                .set(user)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d("Add User", "DocumentSnapshot added with ID: " + documentReference.getId());
+                    public void onSuccess(Void aVoid) {
+                        Log.d("Add User", "DocumentSnapshot successfully written!");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure( Exception e) {
-                        Log.w("Add User", "Error adding document", e);
+                        Log.w("Add User", "Error writing document", e);
                     }
                 });
     }
