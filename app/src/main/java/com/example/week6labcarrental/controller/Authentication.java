@@ -9,6 +9,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.week6labcarrental.MainActivity;
+import com.example.week6labcarrental.firebase.UserCollection;
+import com.example.week6labcarrental.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -38,12 +40,11 @@ public class Authentication {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser userInfo = mAuth.getCurrentUser();
-                            Map<String, Object> user = new HashMap<>();
-                            user.put("userId", userInfo.getUid());
-                            user.put("fullName", fullName);
-                            user.put("email", email);
-                            user.put("role", 1); // Set default role to 1 (User Role)
-                            addNewUserToFirebase(db, user, userInfo.getUid());
+                            // Create new user object
+                            // Set default role to 1 (User Role)
+                            User user= new User(userInfo.getUid(), fullName, email, 1);
+                            UserCollection.addNewUserToFirebase(db, user, userInfo.getUid());
+
                             progressDialog.hide();
                             dialog.dismiss();
                             Toast.makeText(context, "Successfully register!", Toast.LENGTH_SHORT).show();
@@ -64,7 +65,7 @@ public class Authentication {
      * @param email
      * @param password
      */
-    public static void signIn(final Context context, final FirebaseAuth mAuth, final ProgressDialog progressDialog, String email, String password) {
+    public static void signIn(final Context context, final FirebaseFirestore db, final FirebaseAuth mAuth, final ProgressDialog progressDialog, String email, String password) {
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener((Activity) context, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -72,10 +73,23 @@ public class Authentication {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = mAuth.getCurrentUser();
-
+                            User newUser = UserCollection.getUserInformation(db,user.getUid());
                             // move to main activity
-                            Intent intent = new Intent(context, MainActivity.class);
-                            context.startActivity(intent);
+                            switch (newUser.getRole()) {
+                                case 1:
+                                    Intent intent = new Intent(context, MainActivity.class);
+                                    context.startActivity(intent);
+                                    break;
+                                case 2:
+                                    Intent intent2 = new Intent(context, MainActivity.class);
+                                    context.startActivity(intent2);
+                                    break;
+                                case 3:
+                                    Intent intent3 = new Intent(context, MainActivity.class);
+                                    context.startActivity(intent3);
+                                    break;
+                            }
+
                             ((Activity) context).finish();
                         } else {
                             // If sign in fails, display a message to the user.
@@ -87,23 +101,5 @@ public class Authentication {
                     }
                 });
     }
-    public static void addNewUserToFirebase(FirebaseFirestore db, Map<String, Object> user, String userId) {
 
-        // Add a new document with a generated ID
-        db.collection("users")
-                .document(userId)
-                .set(user)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("Add User", "DocumentSnapshot successfully written!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure( Exception e) {
-                        Log.w("Add User", "Error writing document", e);
-                    }
-                });
-    }
 }

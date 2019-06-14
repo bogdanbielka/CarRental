@@ -70,7 +70,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 progressDialog.show();
                 String em = email.getText().toString();
                 String pw = password.getText().toString();
-                Authentication.signIn(this, mAuth, progressDialog, em, pw);
+                Authentication.signIn(this,db, mAuth, progressDialog, em, pw);
                 break;
         }
     }
