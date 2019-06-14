@@ -16,6 +16,8 @@ import com.example.week6labcarrental.controller.PopUp;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     TextView createAccount;
@@ -25,13 +27,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     EditText email, password;
     // Firebase auth
     private FirebaseAuth mAuth;
-
+    FirebaseFirestore db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        FirebaseApp.initializeApp(this);
+       // FirebaseApp.initializeApp(this);
+        db = FirebaseFirestore.getInstance();
+        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                .setTimestampsInSnapshotsEnabled(true)
+                .build();
+        db.setFirestoreSettings(settings);
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
@@ -56,7 +63,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.createAccount:
-                PopUp.openRegisterPopup(dialog, LoginActivity.this, progressDialog, mAuth);
+                PopUp.openRegisterPopup(db, dialog, LoginActivity.this, progressDialog, mAuth);
                 break;
             case R.id.login:
                 progressDialog.setMessage("Login...");
