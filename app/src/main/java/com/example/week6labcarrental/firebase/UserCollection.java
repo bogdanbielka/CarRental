@@ -1,5 +1,7 @@
 package com.example.week6labcarrental.firebase;
 
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 import com.example.week6labcarrental.model.User;
@@ -14,6 +16,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 public class UserCollection {
+    public static final String LOAD_USER_DATA_DONE = "loadUserDataDone";
     /**
      * This function add a new user to User Collection
      * @param db  db reference
@@ -40,12 +43,11 @@ public class UserCollection {
     }
 
     /**
-     *
+     * Get user information, broadcast user info when finish
      * @param db
      * @param documentId
-     * @return
      */
-    public static User getUserInformation(FirebaseFirestore db, String documentId) {
+    public static void getUserInformation(final Context context, FirebaseFirestore db, String documentId) {
         final User user = new User();
         DocumentReference userRef = db.collection("users").document(documentId);
         userRef.get()
@@ -54,13 +56,20 @@ public class UserCollection {
                     public void onComplete( Task < DocumentSnapshot > task) {
                         if (task.isSuccessful()) {
                             DocumentSnapshot doc = task.getResult();
-                            StringBuilder fields = new StringBuilder("");
-                            user.setEmail(doc.get("email").toString());
-                            user.setFullName(doc.get("fullName").toString());
-                            user.setUserId(doc.get("userId").toString());
-                            user.setRole(Integer.parseInt(doc.get("role").toString()));
+
+                            user.setEmail(doc.getString("email"));
+                            user.setFullName(doc.getString("fullName"));
+                            user.setUserId(doc.getString("userId"));
+                            user.setRole(doc.getLong("role").intValue());
 
                         }
+                        //Broadcast the result
+                        Intent broadcast = new Intent();
+
+                        broadcast.setAction(LOAD_USER_DATA_DONE);
+                        broadcast.putExtra("user_data",user);
+
+                        context.sendBroadcast(broadcast);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -68,6 +77,6 @@ public class UserCollection {
                     public void onFailure( Exception e) {
                     }
                 });
-        return user;
+
     }
 }

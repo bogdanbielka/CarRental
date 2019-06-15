@@ -1,9 +1,11 @@
 package com.example.week6labcarrental.model;
 
+import java.io.Serializable;
+
 /**
  * This class represent a User
  */
-public class User {
+public class User implements Serializable {
     // Attributes
     private String userId;
     private String fullName;
@@ -22,7 +24,7 @@ public class User {
 
     }
 
-    // geters and setters
+    // getters and setters
     public String getUserId() {
         return userId;
     }

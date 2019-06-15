@@ -8,29 +8,29 @@ import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.example.week6labcarrental.MainActivity;
 import com.example.week6labcarrental.firebase.UserCollection;
 import com.example.week6labcarrental.model.User;
+import com.example.week6labcarrental.ui.ClientActivity;
+import com.example.week6labcarrental.ui.ManagerActivity;
+import com.example.week6labcarrental.ui.SaleActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class Authentication {
     /**
      * This function register new user
+     * @param dialog
+     * @param db
      * @param context
      * @param mAuth
+     * @param progressDialog
      * @param email
      * @param password
+     * @param fullName
      */
     public static void registerNewUser(final Dialog dialog, final FirebaseFirestore db, final Context context, final FirebaseAuth mAuth, final ProgressDialog progressDialog, final String email, String password, final String fullName) {
         mAuth.createUserWithEmailAndPassword(email, password)
@@ -60,8 +60,11 @@ public class Authentication {
 
     /**
      * This function sign in user with email and password
+     *
      * @param context
+     * @param db
      * @param mAuth
+     * @param progressDialog
      * @param email
      * @param password
      */
@@ -70,36 +73,50 @@ public class Authentication {
                 .addOnCompleteListener((Activity) context, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(Task<AuthResult> task) {
+                        progressDialog.hide();
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = mAuth.getCurrentUser();
-                            User newUser = UserCollection.getUserInformation(db,user.getUid());
-                            // move to main activity
-                            switch (newUser.getRole()) {
-                                case 1:
-                                    Intent intent = new Intent(context, MainActivity.class);
-                                    context.startActivity(intent);
-                                    break;
-                                case 2:
-                                    Intent intent2 = new Intent(context, MainActivity.class);
-                                    context.startActivity(intent2);
-                                    break;
-                                case 3:
-                                    Intent intent3 = new Intent(context, MainActivity.class);
-                                    context.startActivity(intent3);
-                                    break;
-                            }
 
-                            ((Activity) context).finish();
+                            UserCollection.getUserInformation(context, db, user.getUid());
+
+                          //  ((Activity) context).finish();
                         } else {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(context, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
 
                         }
-                        progressDialog.hide();
+
                     }
                 });
     }
 
+    /**
+     * This function process the user data and take the user to the appropriate activity
+     * @param context
+     * @param newUser
+     */
+    public static void processUserData(Context context, User newUser) {
+        switch (newUser.getRole()) {
+            case 1:
+                Log.i("role", "Client");
+                Intent intent = new Intent(context, ClientActivity.class);
+                context.startActivity(intent);
+                break;
+            case 2:
+                Log.i("role", "Sale");
+                Intent intent2 = new Intent(context, SaleActivity.class);
+                context.startActivity(intent2);
+                break;
+            case 3:
+                Log.i("role", "Manager");
+                Intent intent3 = new Intent(context, ManagerActivity.class);
+                context.startActivity(intent3);
+                break;
+            default:
+                Log.i("role", "default");
+                break;
+        }
+    }
 }
