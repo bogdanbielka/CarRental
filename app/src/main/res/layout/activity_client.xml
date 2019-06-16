@@ -6,30 +6,70 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".ui.ClientActivity">
+
     <TextView
         android:id="@+id/txtres"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="RESERVATION"
+        android:text="START A RESERVATION"
         android:textStyle="bold"
-        android:textColor="#000000"
+        android:textColor="@color/black"
         android:padding="10dp"
         android:background="@color/gray" />
-    <Button
-        android:id="@+id/btnPickup"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Pick up"/>
-    <Button
-        android:id="@+id/btnReturn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Return"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnPickup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:layout_weight="1"
+            android:text="Pick up"/>
+        <Button
+            android:id="@+id/btnReturn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:layout_weight="1"
+            android:text="Return"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <TextView
+            android:id="@+id/txtPickup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:text=""/>
+        <TextView
+            android:id="@+id/txtReturn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:textColor="@color/black"
+            android:layout_weight="1"
+            android:text=""/>
+    </LinearLayout>
     <Button
         android:id="@+id/btnReserve"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="RESERVE"/>
+        android:textColor="@color/black"
+        android:text="Continue"/>
 
+    <ListView
+        android:id="@+id/availablecars"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </LinearLayout>

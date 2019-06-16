@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.TextView;
 
 import com.example.week6labcarrental.R;
 
@@ -17,6 +18,8 @@ public class ClientActivity extends AppCompatActivity {
 
     Button btnPickup, btnReturn;
     DatePickerDialog.OnDateSetListener setListener;
+    TextView txtpickup, txtreturn;
+    String pickupdate, returndate; // serves as holder for the dates
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,6 +27,8 @@ public class ClientActivity extends AppCompatActivity {
 
         btnPickup = findViewById(R.id.btnPickup);
         btnReturn = findViewById(R.id.btnReturn);
+        txtpickup = findViewById(R.id.txtPickup);
+        txtreturn = findViewById(R.id.txtReturn);
 
         Calendar c = Calendar.getInstance();
         final int year = c.get(Calendar.YEAR);
@@ -40,7 +45,8 @@ public class ClientActivity extends AppCompatActivity {
                     public void onDateSet(DatePicker view, int year, int month, int day) {
                         month += 1;
                         String date = day + "/" + month + "/" + year;
-                        btnPickup.setText(date);
+                        pickupdate = date;
+                        txtpickup.setText(date);
                     }
                 }, year, month, day);
                 datePickerDialog.getDatePicker().setMinDate(cal.getTimeInMillis());
@@ -65,7 +71,8 @@ public class ClientActivity extends AppCompatActivity {
                     public void onDateSet(DatePicker view, int year, int month, int day) {
                         month += 1;
                         String date = day + "/" + month + "/" + year;
-                        btnReturn.setText(date);
+                        returndate = date;
+                        txtreturn.setText(date);
                     }
                 }, year, month, day);
                 datePickerDialog.getDatePicker().setMinDate(cal.getTimeInMillis());
