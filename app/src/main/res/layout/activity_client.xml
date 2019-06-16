@@ -26,9 +26,9 @@
             android:id="@+id/btnPickup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
             android:layout_weight="1"
-            android:text="Pick up"/>
+            android:text="Pick up"
+            android:textColor="@color/black" />
         <Button
             android:id="@+id/btnReturn"
             android:layout_width="match_parent"
@@ -52,14 +52,15 @@
             android:layout_weight="1"
             android:gravity="center_horizontal"
             android:text=""/>
+
         <TextView
             android:id="@+id/txtReturn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:textColor="@color/black"
             android:layout_weight="1"
-            android:text=""/>
+            android:gravity="center_horizontal"
+            android:text=""
+            android:textColor="@color/black" />
     </LinearLayout>
     <Button
         android:id="@+id/btnReserve"
