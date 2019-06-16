@@ -1,5 +1,6 @@
 package com.example.week6labcarrental.ui;
 
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,10 +10,16 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.example.week6labcarrental.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -44,7 +51,7 @@ public class ManagerActivity extends AppCompatActivity {
 
         initialize();
 
-        Button addBtn = findViewById(R.id.btnAdd);
+        Button addBtn = findViewById(R.id.btn);
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -80,7 +87,7 @@ public class ManagerActivity extends AppCompatActivity {
             }
         });
 
-        //Listening to any change
+//Listening to any change
         final CollectionReference docRef = db.collection(COLLECTION_NAME);
         docRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -115,31 +122,14 @@ public class ManagerActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
     }
-    //====================End
+//====================End
 
-    private void addData(){
+    private void addData() {
         Map<String, Object> cars = new HashMap<>();
         EditText et1 = findViewById(R.id.carIdEdit);
         String ID = et1.getText().toString();
-
-        Spinner et2 = findViewById(R.id.carCategoryEdit);
-        final String [] catrgoryList ={"Sedan","Hatchbacks","SUV","Pickup trucks", "Sports car","Luxury vehicles","MPV"};
-        ArrayAdapter<String> catrgoryListAA = new ArrayAdapter<>(ManagerActivity.this,
-                android.R.layout.simple_spinner_dropdown_item,
-                catrgoryList);
-        et2.setAdapter(catrgoryListAA);
-        et2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                String category = catrgoryList[position];
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-
+        EditText et2 = findViewById(R.id.carCategoryEdit);
+        String category = et2.getText().toString();
         EditText et3 = findViewById(R.id.carPriceHourEdit);
         String pricePerHour = et3.getText().toString();
         EditText et4 = findViewById(R.id.carPriceDayEdit);
@@ -150,40 +140,86 @@ public class ManagerActivity extends AppCompatActivity {
         String model = et6.getText().toString();
         EditText et7 = findViewById(R.id.carColorEdit);
         String color = et7.getText().toString();
-        Spinner et8 = findViewById(R.id.carAvailableEdit);
-        final String [] availabilityList ={"True","False"};
-        ArrayAdapter<String> availabilityListAA = new ArrayAdapter<>(ManagerActivity.this,
-                android.R.layout.simple_spinner_dropdown_item,
-                availabilityList);
-        et8.setAdapter(availabilityListAA);
-        et8.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                String availability = availabilityList[position];
-            }
+        EditText et8 = findViewById(R.id.carAvailableEdit);
+        String availeble = et8.getText().toString();
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
 
-            }
-        });
+        cars.put(key[0], ID);
+        cars.put(key[1], category);
+        cars.put(key[2], pricePerHour);
+        cars.put(key[3], pricePerDay);
+        cars.put(key[4], maker);
+        cars.put(key[5], model);
+        cars.put(key[6], color);
+        cars.put(key[7], availeble);
+
+        db.collection(COLLECTION_NAME)
+                .add(cars)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d(Tag, "DocumentSnapshot added with ID: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(Tag, "Error adding document " + e);
+                    }
+                });
+
     }
 
-    private void displayAllData(){
+    private void displayAllData() {
+        db.collection(COLLECTION_NAME)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            TextView tv = findViewById(R.id.resultTxt);
+                            tv.setText("");
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                tv.append(document.getId() + " => " + document.getData() + "\n");
+                                //display it one by one
+                                //tv.append("\t\t" + key[0]+ " is " + document.getData().get(key[0])+"\n");
+                                Log.d(Tag, document.getId() + " => " + document.getData());
+                            }
+                        } else {
+                            Log.w(Tag, "Error getting documents", task.getException());
+                        }
+                    }
+                });
+    }
+
+    private void searchData() {
+        CollectionReference ref = db.collection(COLLECTION_NAME);
+        EditText et = findViewById(R.id.carIdEdit);
+
+        Query query = ref.whereEqualTo(key[0], et.getText().toString());
+        UID = "";
+        query.get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            TextView tv = findViewById(R.id.resultTxt);
+                            tv.setText("");
+                        }
+                    }
+                });
+    }
+
+    private void updateData() {
 
     }
 
-    private void searchData(){
-
-    }
-
-    private void updateData(){
-
-    }
-
-    private void deleteData(){
+    private void deleteData() {
 
     }
 }
+
+
+
 
 
