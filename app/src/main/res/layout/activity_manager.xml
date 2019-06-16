@@ -97,13 +97,14 @@
             android:layout_weight="3"
             android:text="@string/textCarCategory" />
 
-        <Spinner
+        <EditText
             android:id="@+id/carCategoryEdit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
-            android:hint="@string/hintCarCategory" />
+            android:hint="@string/hintCarCategory"
+            android:inputType="text"/>
     </LinearLayout>
 
     <LinearLayout
@@ -228,13 +229,14 @@
             android:layout_weight="3"
             android:text="@string/textCarAvailable" />
 
-        <Spinner
+        <EditText
             android:id="@+id/carAvailableEdit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
-            android:hint="@string/hintCarAvailable" />
+            android:hint="@string/hintCarAvailable"
+            android:inputType="text"/>
     </LinearLayout>
 
     <TextView
