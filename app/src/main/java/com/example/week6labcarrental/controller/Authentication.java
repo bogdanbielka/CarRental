@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.example.week6labcarrental.firebase.UserCollection;
 import com.example.week6labcarrental.model.User;
 import com.example.week6labcarrental.ui.ClientActivity;
+import com.example.week6labcarrental.ui.LoginActivity;
 import com.example.week6labcarrental.ui.ManagerActivity;
 import com.example.week6labcarrental.ui.SaleActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -117,6 +118,20 @@ public class Authentication {
             default:
                 Log.i("role", "default");
                 break;
+        }
+    }
+
+    /**
+     *
+     * @param mAuth
+     * @param context
+     */
+    public static void checkSignIn(FirebaseAuth mAuth, Context context) {
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser == null) {
+            Intent intent = new Intent(context, LoginActivity.class);
+            context.startActivity(intent);
         }
     }
 }

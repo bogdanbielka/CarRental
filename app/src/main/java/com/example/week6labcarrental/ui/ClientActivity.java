@@ -1,16 +1,22 @@
 package com.example.week6labcarrental.ui;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
 
 import com.example.week6labcarrental.R;
+import com.example.week6labcarrental.controller.Authentication;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Calendar;
 
@@ -20,10 +26,14 @@ public class ClientActivity extends AppCompatActivity {
     DatePickerDialog.OnDateSetListener setListener;
     TextView txtpickup, txtreturn;
     String pickupdate, returndate; // serves as holder for the dates
+    // Firebase auth
+    private FirebaseAuth mAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_client);
+        // Initialize Firebase Auth
+        mAuth = FirebaseAuth.getInstance();
 
         btnPickup = findViewById(R.id.btnPickup);
         btnReturn = findViewById(R.id.btnReturn);
@@ -79,5 +89,30 @@ public class ClientActivity extends AppCompatActivity {
                 datePickerDialog.show();
             }
         });
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        Authentication.checkSignIn(mAuth, this);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.menu_signout:
+                //Do sign out
+                mAuth.signOut();
+                Authentication.checkSignIn(mAuth, this);
+                break;
+
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
