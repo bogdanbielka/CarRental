@@ -82,8 +82,7 @@
             android:layout_weight="1"
             android:ems="10"
             android:hint="@string/hintCarID"
-            android:inputType="text"
-            android:autofillHints="auto" />
+            android:inputType="text"/>
     </LinearLayout>
 
     <LinearLayout
@@ -126,8 +125,7 @@
             android:layout_weight="1"
             android:ems="10"
             android:hint="@string/hintCarPricePerHour"
-            android:inputType="text"
-            android:autofillHints="auto" />
+            android:inputType="text"/>
     </LinearLayout>
 
     <LinearLayout
@@ -149,8 +147,7 @@
             android:layout_weight="1"
             android:ems="10"
             android:hint="@string/hintCarPricePerDay"
-            android:inputType="text"
-            android:autofillHints="auto" />
+            android:inputType="text"/>
     </LinearLayout>
 
     <LinearLayout
@@ -172,8 +169,7 @@
             android:layout_weight="1"
             android:ems="10"
             android:hint="@string/hintCarMaker"
-            android:inputType="text"
-            android:autofillHints="auto" />
+            android:inputType="text"/>
     </LinearLayout>
 
     <LinearLayout
@@ -195,8 +191,7 @@
             android:layout_weight="1"
             android:ems="10"
             android:hint="@string/hintCarModel"
-            android:inputType="text"
-            android:autofillHints="auto" />
+            android:inputType="text"/>
     </LinearLayout>
 
     <LinearLayout
@@ -218,8 +213,7 @@
             android:layout_weight="1"
             android:ems="10"
             android:hint="@string/hintCarColor"
-            android:inputType="text"
-            android:autofillHints="auto" />
+            android:inputType="text"/>
     </LinearLayout>
 
     <LinearLayout
