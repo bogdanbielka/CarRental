@@ -1,8 +1,11 @@
 package com.example.week6labcarrental.ui;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -11,6 +14,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.example.week6labcarrental.R;
+import com.example.week6labcarrental.controller.Authentication;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
@@ -36,12 +42,14 @@ public class ManagerActivity extends AppCompatActivity {
     //In CarData.json file, availability spelling wrong as "availibility"
     private final String[] key = {"carId", "category", "pricePerHour", "pricePerDay", "carMake", "carModel", "color", "availability"};
     private String UID;
-
+    // Firebase auth
+    private FirebaseAuth mAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manager);
-
+        // Initialize Firebase Auth
+        mAuth = FirebaseAuth.getInstance();
         initialize();
 
         Button addBtn = findViewById(R.id.btnAdd);
@@ -103,7 +111,30 @@ public class ManagerActivity extends AppCompatActivity {
             }
         });
     }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Authentication.checkSignIn(mAuth, this);
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.menu_signout:
+                //Do sign out
+                FirebaseAuth.getInstance().signOut();
+                Authentication.checkSignIn(mAuth, this);
+                break;
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
     //====================Connection
     private void initialize() {
         db = FirebaseFirestore.getInstance();
