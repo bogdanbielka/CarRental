@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "840728861605-cdlqqfaf35ba3rom0sbdlmhggicdreoa.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.week6labcarrental",
+            "certificate_hash": "fcfc7749681d5d86ed8e35ea8062774dc00a3b66"
+          }
+        },
+        {
           "client_id": "840728861605-egustdi4s2uqoucq2v02t3pqheumsfpq.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

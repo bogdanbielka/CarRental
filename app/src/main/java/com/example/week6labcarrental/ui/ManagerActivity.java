@@ -137,8 +137,7 @@ public class ManagerActivity extends AppCompatActivity {
         EditText et7 = findViewById(R.id.carColorEdit);
         String color = et7.getText().toString();
         EditText et8 = findViewById(R.id.carAvailableEdit);
-        String availeble = et8.getText().toString();
-
+        String available = et8.getText().toString();
 
         cars.put(key[0], ID);
         cars.put(key[1], category);
@@ -147,7 +146,16 @@ public class ManagerActivity extends AppCompatActivity {
         cars.put(key[4], maker);
         cars.put(key[5], model);
         cars.put(key[6], color);
-        cars.put(key[7], availeble);
+        cars.put(key[7], available);
+
+        et1.setText("");
+        et2.setText("");
+        et3.setText("");
+        et4.setText("");
+        et5.setText("");
+        et6.setText("");
+        et7.setText("");
+        et8.setText("");
 
         db.collection(COLLECTION_NAME)
                 .add(cars)
@@ -167,6 +175,22 @@ public class ManagerActivity extends AppCompatActivity {
     }
 
     private void displayAllData() {
+        EditText et1 = findViewById(R.id.carIdEdit);
+        EditText et2 = findViewById(R.id.carCategoryEdit);
+        EditText et3 = findViewById(R.id.carPriceHourEdit);
+        EditText et4 = findViewById(R.id.carPriceDayEdit);
+        EditText et5 = findViewById(R.id.carMakerEdit);
+        EditText et6 = findViewById(R.id.carModelEdit);
+        EditText et7 = findViewById(R.id.carColorEdit);
+        EditText et8 = findViewById(R.id.carAvailableEdit);
+        et1.setText("");
+        et2.setText("");
+        et3.setText("");
+        et4.setText("");
+        et5.setText("");
+        et6.setText("");
+        et7.setText("");
+        et8.setText("");
         db.collection(COLLECTION_NAME)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -193,6 +217,48 @@ public class ManagerActivity extends AppCompatActivity {
         EditText et = findViewById(R.id.carIdEdit);
 
         Query query = ref.whereEqualTo(key[0], et.getText().toString());
+        //UID = "";
+        query.get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            TextView tv = findViewById(R.id.resultTxt);
+                            tv.setText("");
+                            EditText et2 = findViewById(R.id.carCategoryEdit);
+                            EditText et3 = findViewById(R.id.carPriceHourEdit);
+                            EditText et4 = findViewById(R.id.carPriceDayEdit);
+                            EditText et5 = findViewById(R.id.carMakerEdit);
+                            EditText et6 = findViewById(R.id.carModelEdit);
+                            EditText et7 = findViewById(R.id.carColorEdit);
+                            EditText et8 = findViewById(R.id.carAvailableEdit);
+
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                tv.append(document.getId() + " => " + document.getData());
+                                Log.d(Tag, document.getId() + " => " + document.getData());
+
+                                //UID = document.getId();
+                                et2.setText(document.getData().get(key[1]) + "");
+                                et3.setText(document.getData().get(key[2]) + "");
+                                et4.setText(document.getData().get(key[3]) + "");
+                                et5.setText(document.getData().get(key[4]) + "");
+                                et6.setText(document.getData().get(key[5]) + "");
+                                et7.setText(document.getData().get(key[6]) + "");
+                                et8.setText(document.getData().get(key[7]) + "");
+                            }
+
+                        } else {
+                            Log.w(Tag, "Error getting document.", task.getException());
+                        }
+                    }
+                });
+    }
+
+    private void updateData() {
+        CollectionReference ref = db.collection(COLLECTION_NAME);
+        EditText et = findViewById(R.id.carIdEdit);
+
+        Query query = ref.whereEqualTo(key[0], et.getText().toString());
         UID = "";
         query.get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -201,17 +267,75 @@ public class ManagerActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             TextView tv = findViewById(R.id.resultTxt);
                             tv.setText("");
+                            EditText et1 = findViewById(R.id.carIdEdit);
+                            EditText et2 = findViewById(R.id.carCategoryEdit);
+                            EditText et3 = findViewById(R.id.carPriceHourEdit);
+                            EditText et4 = findViewById(R.id.carPriceDayEdit);
+                            EditText et5 = findViewById(R.id.carMakerEdit);
+                            EditText et6 = findViewById(R.id.carModelEdit);
+                            EditText et7 = findViewById(R.id.carColorEdit);
+                            EditText et8 = findViewById(R.id.carAvailableEdit);
+
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                tv.append(document.getId() + " => " + document.getData());
+                                Log.d(Tag, document.getId() + " => " + document.getData());
+
+                                UID = document.getId();
+                                Map<String, Object> car = new HashMap<>();
+                                car.put(key[0], et1.getText().toString());
+                                car.put(key[1], et2.getText().toString());
+                                car.put(key[2], et3.getText().toString());
+                                car.put(key[3], et4.getText().toString());
+                                car.put(key[4], et5.getText().toString());
+                                car.put(key[5], et6.getText().toString());
+                                car.put(key[6], et7.getText().toString());
+                                car.put(key[7], et8.getText().toString());
+                                db.collection(COLLECTION_NAME).document(UID).update(car);
+
+                                searchData();
+                            }
+
+                        } else {
+                            Log.w(Tag, "Error getting document.", task.getException());
                         }
                     }
                 });
     }
 
-    private void updateData() {
-
-    }
-
     private void deleteData() {
+        CollectionReference ref = db.collection(COLLECTION_NAME);
+        EditText et = findViewById(R.id.carIdEdit);
 
+        Query query = ref.whereEqualTo(key[0], et.getText().toString());
+        UID = "";
+        query.get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                UID = document.getId();
+                                Log.d(Tag, UID);
+                                db.collection(COLLECTION_NAME).document(UID)
+                                        .delete()
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Log.d(Tag, "Success delete");
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Log.w(Tag, "Error delete", e);
+                                            }
+                                        });
+                            }
+                        } else {
+                            Log.w(Tag, "Error getting document.", task.getException());
+                        }
+                    }
+                });
     }
 }
 
