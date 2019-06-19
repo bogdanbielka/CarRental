@@ -99,21 +99,22 @@ public class Authentication {
      * @param newUser
      */
     public static void processUserData(Context context, User newUser) {
+        Intent intent;
         switch (newUser.getRole()) {
             case 1:
                 Log.i("role", "Client");
-                Intent intent = new Intent(context, ClientActivity.class);
+                intent = new Intent(context, ClientActivity.class);
                 context.startActivity(intent);
                 break;
             case 2:
                 Log.i("role", "Sale");
-                Intent intent2 = new Intent(context, SaleActivity.class);
-                context.startActivity(intent2);
+                intent = new Intent(context, SaleActivity.class);
+                context.startActivity(intent);
                 break;
             case 3:
                 Log.i("role", "Manager");
-                Intent intent3 = new Intent(context, ManagerActivity.class);
-                context.startActivity(intent3);
+                intent = new Intent(context, ManagerActivity.class);
+                context.startActivity(intent);
                 break;
             default:
                 Log.i("role", "default");
