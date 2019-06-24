@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".ui.ManagerActivity">
 
@@ -13,238 +14,111 @@
         android:layout_margin="10dp"
         android:singleLine="false"
         android:text="@string/managerTitle"
+        android:textColor="@color/colorAccent"
         android:textSize="24sp" />
 
-    <LinearLayout
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="horizontal"-->
+        <!--style="?android:attr/buttonBarStyle">-->
+
+
+        <!--<Button-->
+            <!--android:id="@+id/btnAdd"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:text="@string/btnCarAdd"-->
+            <!--style="?android:attr/buttonBarButtonStyle"/>-->
+
+        <!--<Button-->
+            <!--android:id="@+id/btnDispAll"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:text="@string/btnCarAllCar"-->
+            <!--style="?android:attr/buttonBarButtonStyle"/>-->
+
+        <!--<Button-->
+            <!--android:id="@+id/btnSearch"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:text="@string/btnCarSearch"-->
+            <!--style="?android:attr/buttonBarButtonStyle"/>-->
+
+        <!--<Button-->
+            <!--android:id="@+id/btnUpdate"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:text="@string/btnCarUpdate"-->
+            <!--style="?android:attr/buttonBarButtonStyle"/>-->
+
+        <!--<Button-->
+            <!--android:id="@+id/btnDelete"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:text="@string/btnCarDelete"-->
+            <!--style="?android:attr/buttonBarButtonStyle"/>-->
+    <!--</LinearLayout>-->
+    <android.support.design.widget.TabLayout
+        android:id="@+id/myTabLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="55dp">
+
+        <android.support.design.widget.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="All Cars" />
+
+        <android.support.design.widget.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Car" />
+
+        <android.support.design.widget.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Search" />
+    </android.support.design.widget.TabLayout>
+    <LinearLayout
+        android:id="@+id/searchBox"
         android:orientation="horizontal"
-        style="?android:attr/buttonBarStyle">
-
-
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+        <EditText
+        android:id="@+id/txtSearch"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:hint="Search"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:paddingLeft="25dp"
+        />
         <Button
-            android:id="@+id/btnAdd"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/btnCarAdd"
-            style="?android:attr/buttonBarButtonStyle"/>
-
-        <Button
-            android:id="@+id/btnDispAll"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/btnCarAllCar"
-            style="?android:attr/buttonBarButtonStyle"/>
-
-        <Button
-            android:id="@+id/btnSearch"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/btnCarSearch"
-            style="?android:attr/buttonBarButtonStyle"/>
-
-        <Button
-            android:id="@+id/btnUpdate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/btnCarUpdate"
-            style="?android:attr/buttonBarButtonStyle"/>
-
-        <Button
-            android:id="@+id/btnDelete"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/btnCarDelete"
-            style="?android:attr/buttonBarButtonStyle"/>
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:id="@+id/btnAddNew"
+            android:layout_below="@id/carAvailableCheckBox"
+            android:text="Search"
+            android:textColor="@color/colorSecondary"
+            android:background="@color/colorThird"
+            />
     </LinearLayout>
 
-    <LinearLayout
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/myRec"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/carId"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:text="@string/textCarID" />
-
-        <EditText
-            android:id="@+id/carIdEdit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:hint="@string/hintCarID"
-            android:inputType="text"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/carCategory"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:text="@string/textCarCategory" />
-
-        <EditText
-            android:id="@+id/carCategoryEdit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:hint="@string/hintCarCategory"
-            android:inputType="text"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/carPriceHour"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:text="@string/textCarPricePerHour" />
-
-        <EditText
-            android:id="@+id/carPriceHourEdit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:hint="@string/hintCarPricePerHour"
-            android:inputType="text"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/carPriceDay"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:text="@string/textCarPricePerDay" />
-
-        <EditText
-            android:id="@+id/carPriceDayEdit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:hint="@string/hintCarPricePerDay"
-            android:inputType="text"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/carMaker"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:text="@string/textCarMaker" />
-
-        <EditText
-            android:id="@+id/carMakerEdit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:hint="@string/hintCarMaker"
-            android:inputType="text"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/carModel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:text="@string/textCarModel" />
-
-        <EditText
-            android:id="@+id/carModelEdit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:hint="@string/hintCarModel"
-            android:inputType="text"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/carColor"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:text="@string/textCarColor" />
-
-        <EditText
-            android:id="@+id/carColorEdit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:hint="@string/hintCarColor"
-            android:inputType="text"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/carAvailable"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:text="@string/textCarAvailable" />
-
-        <EditText
-            android:id="@+id/carAvailableEdit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:hint="@string/hintCarAvailable"
-            android:inputType="text"/>
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/resultTxt"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:singleLine="false"
-        android:text="" />
-
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintVertical_bias="0.387" />
 </LinearLayout>
 
