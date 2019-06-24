@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import com.example.week6labcarrental.R;
 import com.example.week6labcarrental.model.Car;
@@ -36,7 +35,14 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
-
+        viewHolder.category.setText(mData.get(position).getCategory());
+        viewHolder.availability.setText(mData.get(position).getAvailibility());
+        viewHolder.carPriceDay.setText(String.valueOf(mData.get(position).getPricePerDay()));
+        viewHolder.carPriceHour.setText(String.valueOf(mData.get(position).getPricePerHour()));
+        viewHolder.seats.setText(mData.get(position).getSeats());
+        viewHolder.carModel.setText(mData.get(position).getCarModel());
+        viewHolder.carMake.setText(mData.get(position).getCarMake());
+        viewHolder.color.setText(mData.get(position).getColor());
     }
 
     @Override
@@ -47,10 +53,18 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
-        ImageView imageView;
-        TextView textView;
+        TextView category, carMake, carModel, carPriceHour, carPriceDay, seats, availability, color;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            category = itemView.findViewById(R.id.txtCategory);
+            carMake = itemView.findViewById(R.id.txtCarMake);
+            carModel = itemView.findViewById(R.id.txtCarModel);
+            carPriceHour = itemView.findViewById(R.id.txtPriceHour);
+            carPriceDay = itemView.findViewById(R.id.txtPriceDay);
+            seats = itemView.findViewById(R.id.txtSeats);
+            availability = itemView.findViewById(R.id.txtAvailability);
+            color = itemView.findViewById(R.id.txtColor);
 
         }
 
