@@ -1,9 +1,11 @@
 package com.example.week6labcarrental.model;
 
+import java.io.Serializable;
+
 /**
  * This class represent a Car
  */
-public class Car {
+public class Car implements Serializable {
     private String carId;
     private String category;
     private String carMake;
@@ -12,12 +14,12 @@ public class Car {
     private double pricePerDay;
     private int seats;
     private String color;
-    private String availibility;
+    private boolean availibility;
 
     public Car() {
     }
 
-    public Car(String carId, String category, String carMake, String carModel, double pricePerHour, double pricePerDay, int seats, String color, String availibility) {
+    public Car(String carId, String category, String carMake, String carModel, double pricePerHour, double pricePerDay, int seats, String color, boolean availibility) {
         this.carId = carId;
         this.category = category;
         this.carMake = carMake;
@@ -95,11 +97,11 @@ public class Car {
         this.color = color;
     }
 
-    public String getAvailibility() {
+    public boolean getAvailibility() {
         return availibility;
     }
 
-    public void setAvailibility(String availibility) {
+    public void setAvailibility(boolean availibility) {
         this.availibility = availibility;
     }
 }

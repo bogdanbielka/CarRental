@@ -15,31 +15,33 @@ import java.util.List;
 
 public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.ViewHolder> {
     public static final String TAG = "MyRecyclerAdapter";
-    private LayoutInflater mLayoutInflater;
     private ItemClickListener mClickListener;
     private List<Car> mData;
 
-    public MyRecyclerAdapter(Context context, List<Car> data){
-        this.mLayoutInflater = LayoutInflater.from(context);
-        this.mData = data;
+    public MyRecyclerAdapter() {
+    }
 
+    public MyRecyclerAdapter( List<Car> data){
+        this.mData = data;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = mLayoutInflater.inflate(R.layout.layout_item, viewGroup,false);
-        final ViewHolder holder = new ViewHolder(view);
-        return holder;
+        LayoutInflater linf = LayoutInflater.from(viewGroup.getContext());
+        View itemView = linf.inflate(R.layout.layout_item, viewGroup, false);
+        ViewHolder itemViewHolder = new ViewHolder(itemView);
+        return itemViewHolder;
+
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         viewHolder.category.setText(mData.get(position).getCategory());
-        viewHolder.availability.setText(mData.get(position).getAvailibility());
+        viewHolder.availability.setText(String.valueOf(mData.get(position).getAvailibility()));
         viewHolder.carPriceDay.setText(String.valueOf(mData.get(position).getPricePerDay()));
         viewHolder.carPriceHour.setText(String.valueOf(mData.get(position).getPricePerHour()));
-        viewHolder.seats.setText(mData.get(position).getSeats());
+        //viewHolder.seats.setText(mData.get(position).getSeats());
         viewHolder.carModel.setText(mData.get(position).getCarModel());
         viewHolder.carMake.setText(mData.get(position).getCarMake());
         viewHolder.color.setText(mData.get(position).getColor());
@@ -50,6 +52,9 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
         if(mData != null) {
             return mData.size();
         } return 0;
+    }
+    public void changeData( List<Car> data){
+        this.mData = data;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{

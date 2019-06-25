@@ -1,10 +1,17 @@
 package com.example.week6labcarrental.ui;
 
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,8 +23,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.week6labcarrental.R;
+import com.example.week6labcarrental.adapter.MyRecyclerAdapter;
 import com.example.week6labcarrental.controller.Authentication;
 import com.example.week6labcarrental.controller.PopUp;
+import com.example.week6labcarrental.firebase.CarCollection;
+import com.example.week6labcarrental.firebase.UserCollection;
+import com.example.week6labcarrental.model.Car;
+import com.example.week6labcarrental.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -34,6 +46,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,17 +67,30 @@ public class ManagerActivity extends AppCompatActivity {
     EditText search;
     LinearLayout searchBox;
     Dialog dialog;
+    //save all cars to this list
+    ArrayList<Car> carsList;
+    // Listener response
+    BroadcastReceiver response;
+    //Recycler View
+    RecyclerView recyclerView;
+    MyRecyclerAdapter recyclerAdapter;
+    MyRecyclerAdapter.ItemClickListener itemClickListener;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manager);
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
-
+        carsList = new ArrayList<>();
         initialize();
         dialog = new Dialog(this);
 
         searchBox = findViewById(R.id.searchBox);
+
+        recyclerView =  findViewById(R.id.myRec);
+        recyclerAdapter = new MyRecyclerAdapter(carsList);
+        recyclerView.setAdapter(recyclerAdapter);
+        recyclerView.setLayoutManager(new GridLayoutManager(ManagerActivity.this, 1));
 
         TabLayout myTabLayout = (TabLayout) findViewById(R.id.myTabLayout);
         myTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -95,6 +121,24 @@ public class ManagerActivity extends AppCompatActivity {
                 }
             }
         });
+
+
+        //initialize response
+        response = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getAction().equals(CarCollection.LOAD_CAR_DATA_DONE)) {
+                    //get user Data from intent
+                    carsList = (ArrayList<Car>) intent.getSerializableExtra("cars_data");
+                    Log.i("carlist", String.valueOf(carsList.size()));
+                    recyclerAdapter.changeData(carsList);
+                    recyclerAdapter.notifyDataSetChanged();
+
+
+                }
+            }
+        };
+
 //        Button addBtn = findViewById(R.id.btnAdd);
 //        addBtn.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -177,11 +221,28 @@ public class ManagerActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder().build();
         db.setFirestoreSettings(settings);
+        //get all the cars
+        CarCollection.getAllCars(this,db);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+    @Override
+    protected void onPause() {
+        // Unregister since the activity is paused.
+        super.onPause();
+        unregisterReceiver(response);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // An IntentFilter can match against actions, categories, and data
+        IntentFilter filter = new IntentFilter(CarCollection.LOAD_CAR_DATA_DONE);
+
+        registerReceiver(response,filter);
     }
 //====================End
 //
