@@ -153,7 +153,7 @@ public class PopUp {
         dialog.show();
     }
 
-    public static void openAddNewCarPopup(FirebaseFirestore db, final Dialog dialog, ManagerActivity managerActivity, FirebaseAuth mAuth, Car clickedCar) {
+    public static void openUpdateCarPopup(FirebaseFirestore db, final Dialog dialog, ManagerActivity managerActivity, FirebaseAuth mAuth, Car clickedCar) {
         dialog.setContentView(R.layout.add_new_car_popup);
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         ImageView closeBtn = dialog.findViewById(R.id.btnClose);

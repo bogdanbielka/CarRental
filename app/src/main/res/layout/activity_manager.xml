@@ -77,13 +77,32 @@
         <android.support.design.widget.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="New Car" />
-
+            android:text="All Users" />
+        <android.support.design.widget.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="All Orders" />
         <android.support.design.widget.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Search" />
     </android.support.design.widget.TabLayout>
+
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:id="@+id/btnAddNew"
+            android:layout_below="@id/carAvailableCheckBox"
+            android:text="Add New User"
+            android:textColor="@color/colorSecondary"
+            android:background="@color/colorThird"
+            />
+
     <LinearLayout
         android:id="@+id/searchBox"
         android:orientation="horizontal"
@@ -104,7 +123,7 @@
         <Button
             android:layout_width="100dp"
             android:layout_height="40dp"
-            android:id="@+id/btnAddNew"
+            android:id="@+id/btnSearch"
             android:layout_below="@id/carAvailableCheckBox"
             android:text="Search"
             android:textColor="@color/colorSecondary"

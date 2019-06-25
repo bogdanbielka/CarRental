@@ -23,7 +23,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.week6labcarrental.R;
+import com.example.week6labcarrental.adapter.ItemClickListener;
 import com.example.week6labcarrental.adapter.MyRecyclerAdapter;
+import com.example.week6labcarrental.adapter.UserRecyclerAdapter;
 import com.example.week6labcarrental.controller.Authentication;
 import com.example.week6labcarrental.controller.PopUp;
 import com.example.week6labcarrental.firebase.CarCollection;
@@ -53,7 +55,7 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
-public class ManagerActivity extends AppCompatActivity implements MyRecyclerAdapter.ItemClickListener{
+public class ManagerActivity extends AppCompatActivity implements  ItemClickListener {
     //declarations
     private FirebaseFirestore db;
     public static final String COLLECTION_NAME = "cars";
@@ -67,14 +69,18 @@ public class ManagerActivity extends AppCompatActivity implements MyRecyclerAdap
     EditText search;
     LinearLayout searchBox;
     Dialog dialog;
-    //save all cars to this list
+    // lists
     ArrayList<Car> carsList;
+    ArrayList<User> usersList;
     // Listener response
     BroadcastReceiver response;
     //Recycler View
     RecyclerView recyclerView;
-    MyRecyclerAdapter recyclerAdapter;
-    MyRecyclerAdapter.ItemClickListener itemClickListener;
+    MyRecyclerAdapter carRecyclerAdapter;
+    UserRecyclerAdapter userRecyclerAdapter;
+    ItemClickListener itemClickListener;
+
+    Button addNewUser;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,10 +92,12 @@ public class ManagerActivity extends AppCompatActivity implements MyRecyclerAdap
         dialog = new Dialog(this);
 
         searchBox = findViewById(R.id.searchBox);
+        addNewUser = findViewById(R.id.btnAddNew);
 
         recyclerView =  findViewById(R.id.myRec);
-        recyclerAdapter = new MyRecyclerAdapter(carsList, this);
-        recyclerView.setAdapter(recyclerAdapter);
+        carRecyclerAdapter = new MyRecyclerAdapter(carsList, this);
+        userRecyclerAdapter = new UserRecyclerAdapter(usersList, this);
+        recyclerView.setAdapter(carRecyclerAdapter);
         recyclerView.setLayoutManager(new GridLayoutManager(ManagerActivity.this, 1));
 
         TabLayout myTabLayout = (TabLayout) findViewById(R.id.myTabLayout);
@@ -98,15 +106,24 @@ public class ManagerActivity extends AppCompatActivity implements MyRecyclerAdap
             public void onTabSelected(TabLayout.Tab tab) {
                 switch (tab.getPosition()) {
                     case 0:
+                        // change adapter in RecyclerView
+                        recyclerView.setAdapter(carRecyclerAdapter);
                         searchBox.setVisibility(View.GONE);
+                        addNewUser.setVisibility(View.VISIBLE);
                         break;
                     case 1:
-                        // show pop up
-                        PopUp.openAddNewCarPopup(db,dialog, ManagerActivity.this,mAuth);
+                        //change adapter in RecyclerView
+                        recyclerView.setAdapter(userRecyclerAdapter);
                         searchBox.setVisibility(View.GONE);
+                        addNewUser.setVisibility(View.GONE);
                         break;
                     case 2:
+                        searchBox.setVisibility(View.GONE);
+                        addNewUser.setVisibility(View.GONE);
+                        break;
+                    case 3:
                         searchBox.setVisibility(View.VISIBLE);
+                        addNewUser.setVisibility(View.GONE);
                         break;
                 }
             }
@@ -121,59 +138,37 @@ public class ManagerActivity extends AppCompatActivity implements MyRecyclerAdap
                 }
             }
         });
-
+        // add new user button click
+        addNewUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // show pop up
+                PopUp.openAddNewCarPopup(db,dialog, ManagerActivity.this,mAuth);
+            }
+        });
 
         //initialize response
         response = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                if (intent.getAction().equals(CarCollection.LOAD_CAR_DATA_DONE)) {
-                    //get user Data from intent
-                    carsList = (ArrayList<Car>) intent.getSerializableExtra("cars_data");
-                    Log.i("carlist", String.valueOf(carsList.size()));
-                    recyclerAdapter.changeData(carsList);
-                    recyclerAdapter.notifyDataSetChanged();
-
+                switch (intent.getAction()){
+                    case CarCollection.LOAD_CAR_DATA_DONE :
+                        //get car Data from intent
+                        carsList = (ArrayList<Car>) intent.getSerializableExtra("cars_data");
+                        Log.i("carlist", String.valueOf(carsList.size()));
+                        carRecyclerAdapter.changeData(carsList);
+                        carRecyclerAdapter.notifyDataSetChanged();
+                        break;
+                    case UserCollection.LOAD_USER_LIST_DATA_DONE :
+                        //get user Data from intent
+                        usersList = (ArrayList<User>) intent.getSerializableExtra("users_data");
+                        userRecyclerAdapter.changeData(usersList);
+                        userRecyclerAdapter.notifyDataSetChanged();
+                        break;
 
                 }
             }
         };
-
-//        Button addBtn = findViewById(R.id.btnAdd);
-//        addBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                addData();
-//            }
-//        });
-//        Button displayAllBtn = findViewById(R.id.btnDispAll);
-//        displayAllBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                displayAllData();
-//            }
-//        });
-//        Button searchBtn = findViewById(R.id.btnSearch);
-//        searchBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                searchData();
-//            }
-//        });
-//        Button updateBtn = findViewById(R.id.btnUpdate);
-//        updateBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                updateData();
-//            }
-//        });
-//        Button deleteBtn = findViewById(R.id.btnDelete);
-//        deleteBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                deleteData();
-//            }
-//        });
 
 //Listening to any change
         final CollectionReference docRef = db.collection(COLLECTION_NAME);
@@ -223,6 +218,8 @@ public class ManagerActivity extends AppCompatActivity implements MyRecyclerAdap
         db.setFirestoreSettings(settings);
         //get all the cars
         CarCollection.getAllCars(this,db);
+        //get all users
+        UserCollection.getAllUsers(this,db);
     }
 
     @Override
@@ -240,15 +237,22 @@ public class ManagerActivity extends AppCompatActivity implements MyRecyclerAdap
     protected void onResume() {
         super.onResume();
         // An IntentFilter can match against actions, categories, and data
-        IntentFilter filter = new IntentFilter(CarCollection.LOAD_CAR_DATA_DONE);
-
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(CarCollection.LOAD_CAR_DATA_DONE);
+        filter.addAction(UserCollection.LOAD_USER_LIST_DATA_DONE);
         registerReceiver(response,filter);
     }
 
     @Override
     public void onItemClick(View view, int position) {
         Car clickedCar = carsList.get(position);
-        PopUp.openAddNewCarPopup(db,dialog, ManagerActivity.this,mAuth, clickedCar);
+        switch (view.getId()) {
+            case R.id.carItemLayout:
+                //open PopUp
+                PopUp.openUpdateCarPopup(db,dialog, ManagerActivity.this,mAuth, clickedCar);
+                break;
+        }
+
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.example.week6labcarrental.adapter;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -102,10 +101,6 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
     public void setClickListener(ItemClickListener itemClickListener) {
         this.mClickListener = itemClickListener;
         Log.d("TAG","Success: Clicked!");
-    }
-    public interface ItemClickListener {
-        void onItemClick(View view, int position);
-        void onItemLongClick(View view, int position);
     }
 
 }

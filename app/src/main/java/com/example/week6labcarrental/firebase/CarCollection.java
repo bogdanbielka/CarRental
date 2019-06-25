@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 public class CarCollection {
     public static final String LOAD_CAR_DATA_DONE = "doneLoadCarData";
+    public static final String COLLECTION_NAME = "cars";
     /**
      *
      * @param context
@@ -23,7 +24,7 @@ public class CarCollection {
      */
     public static ArrayList<Car> getAllCars(final Context context, FirebaseFirestore db) {
         final ArrayList<Car> cars = new ArrayList<>();
-        db.collection("cars")
+        db.collection(COLLECTION_NAME)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
