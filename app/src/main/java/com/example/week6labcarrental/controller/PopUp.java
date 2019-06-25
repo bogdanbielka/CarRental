@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.week6labcarrental.R;
+import com.example.week6labcarrental.model.Car;
 import com.example.week6labcarrental.ui.ManagerActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -128,19 +129,74 @@ public class PopUp {
         carAvailable.setChecked(true);
 
         db.collection(ManagerActivity.COLLECTION_NAME)
-                .add(cars)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                .document(ID)
+                .set(cars)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        //Log.d(Tag, "DocumentSnapshot added with ID: " + documentReference.getId());
+                    public void onSuccess(Void aVoid) {
+                        Log.d("Add User", "DocumentSnapshot successfully written!");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
-                    public void onFailure(@NonNull Exception e) {
-                        //Log.d(Tag, "Error adding document " + e);
+                    public void onFailure( Exception e) {
+                        Log.w("Add User", "Error writing document", e);
                     }
                 });
+
+        closeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
+    public static void openAddNewCarPopup(FirebaseFirestore db, final Dialog dialog, ManagerActivity managerActivity, FirebaseAuth mAuth, Car clickedCar) {
+        dialog.setContentView(R.layout.add_new_car_popup);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        ImageView closeBtn = dialog.findViewById(R.id.btnClose);
+        Map<String, Object> cars = new HashMap<>();
+        String ID =  UUID.randomUUID().toString();
+        EditText et2 = dialog.findViewById(R.id.carCategoryEdit);
+        String category = et2.getText().toString();
+        EditText et3 = dialog.findViewById(R.id.carPriceHourEdit);
+        String pricePerHour = et3.getText().toString();
+        EditText et4 = dialog.findViewById(R.id.carPriceDayEdit);
+        String pricePerDay = et4.getText().toString();
+        EditText et5 = dialog.findViewById(R.id.carMakerEdit);
+        String maker = et5.getText().toString();
+        EditText et6 = dialog.findViewById(R.id.carModelEdit);
+        String model = et6.getText().toString();
+        EditText et7 = dialog.findViewById(R.id.carColorEdit);
+        String color = et7.getText().toString();
+        CheckBox carAvailable = dialog.findViewById(R.id.carAvailableCheckBox);
+        boolean available = carAvailable.isChecked();
+
+
+        et2.setText(clickedCar.getCategory());
+        et3.setText(String.valueOf( clickedCar.getPricePerHour()));
+        et4.setText("");
+        et5.setText("");
+        et6.setText("");
+        et7.setText("");
+        carAvailable.setChecked(true);
+
+//        db.collection(ManagerActivity.COLLECTION_NAME)
+//                .add(cars)
+//                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+//                    @Override
+//                    public void onSuccess(DocumentReference documentReference) {
+//                        //Log.d(Tag, "DocumentSnapshot added with ID: " + documentReference.getId());
+//                    }
+//                })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        //Log.d(Tag, "Error adding document " + e);
+//                    }
+//                });
 
         closeBtn.setOnClickListener(new View.OnClickListener() {
             @Override

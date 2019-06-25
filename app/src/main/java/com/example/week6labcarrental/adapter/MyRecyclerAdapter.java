@@ -21,8 +21,9 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
     public MyRecyclerAdapter() {
     }
 
-    public MyRecyclerAdapter( List<Car> data){
+    public MyRecyclerAdapter( List<Car> data, ItemClickListener mClickListener){
         this.mData = data;
+        this.mClickListener = mClickListener;
     }
 
     @NonNull
@@ -32,6 +33,8 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
         View itemView = linf.inflate(R.layout.layout_item, viewGroup, false);
         ViewHolder itemViewHolder = new ViewHolder(itemView);
         return itemViewHolder;
+
+
 
     }
 
@@ -45,6 +48,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
         viewHolder.carModel.setText(mData.get(position).getCarModel());
         viewHolder.carMake.setText(mData.get(position).getCarMake());
         viewHolder.color.setText(mData.get(position).getColor());
+
     }
 
     @Override
@@ -71,6 +75,9 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
             availability = itemView.findViewById(R.id.txtAvailability);
             color = itemView.findViewById(R.id.txtColor);
 
+            itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
+            color.setOnLongClickListener(this);
         }
 
         @Override
@@ -83,6 +90,10 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
         public boolean onLongClick(View v) {
             mClickListener.onItemLongClick(v, getAdapterPosition());
             Log.d("TAG","View:Long Clicked!");
+            if(v.getId() == R.id.txtColor) {
+                mClickListener.onItemLongClick(v,getAdapterPosition() );
+            }
+
             return true;
         }
     }

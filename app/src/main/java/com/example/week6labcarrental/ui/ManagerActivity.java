@@ -53,7 +53,7 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
-public class ManagerActivity extends AppCompatActivity {
+public class ManagerActivity extends AppCompatActivity implements MyRecyclerAdapter.ItemClickListener{
     //declarations
     private FirebaseFirestore db;
     public static final String COLLECTION_NAME = "cars";
@@ -88,7 +88,7 @@ public class ManagerActivity extends AppCompatActivity {
         searchBox = findViewById(R.id.searchBox);
 
         recyclerView =  findViewById(R.id.myRec);
-        recyclerAdapter = new MyRecyclerAdapter(carsList);
+        recyclerAdapter = new MyRecyclerAdapter(carsList, this);
         recyclerView.setAdapter(recyclerAdapter);
         recyclerView.setLayoutManager(new GridLayoutManager(ManagerActivity.this, 1));
 
@@ -243,6 +243,19 @@ public class ManagerActivity extends AppCompatActivity {
         IntentFilter filter = new IntentFilter(CarCollection.LOAD_CAR_DATA_DONE);
 
         registerReceiver(response,filter);
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        Car clickedCar = carsList.get(position);
+        PopUp.openAddNewCarPopup(db,dialog, ManagerActivity.this,mAuth, clickedCar);
+    }
+
+    @Override
+    public void onItemLongClick(View view, int position) {
+        Toast.makeText(this, "Long clicked", Toast.LENGTH_SHORT).show();
+        //call the delete function
+
     }
 //====================End
 //
