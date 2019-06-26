@@ -16,7 +16,7 @@
         android:layout_marginTop="15dp"
         android:id="@+id/btnClose"
         android:background="@drawable/ic_close"/>
-    <EditText
+    <Spinner
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:id="@+id/carCategoryEdit"
@@ -83,7 +83,8 @@
         android:padding="10dp"
         android:layout_below="@id/carColorEdit"
         android:layout_centerHorizontal="true"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:inputType="numberDecimal"/>
 
     <EditText
         android:layout_width="250dp"
@@ -98,7 +99,8 @@
         android:gravity="center"
         android:padding="10dp"
         android:layout_below="@id/carPriceHourEdit"
-        android:layout_marginTop="15dp" />
+        android:layout_marginTop="15dp"
+        android:inputType="numberDecimal"/>
     <EditText
         android:layout_width="250dp"
         android:layout_centerHorizontal="true"
@@ -112,7 +114,8 @@
         android:gravity="center"
         android:padding="10dp"
         android:layout_below="@id/carPriceDayEdit"
-        android:layout_marginTop="15dp" />
+        android:layout_marginTop="15dp"
+        android:inputType="number"/>
     <CheckBox
     android:id="@+id/carAvailableCheckBox"
     android:layout_weight="1"
