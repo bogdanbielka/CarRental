@@ -14,7 +14,7 @@ public class Car implements Serializable {
     private double pricePerDay;
     private int seats;
     private String color;
-    private boolean availibility;
+    private boolean availability;
 
     public Car() {
     }
@@ -28,7 +28,7 @@ public class Car implements Serializable {
         this.pricePerDay = pricePerDay;
         this.seats = seats;
         this.color = color;
-        this.availibility = availibility;
+        this.availability = availibility;
     }
 
 //getters and setters
@@ -97,11 +97,11 @@ public class Car implements Serializable {
         this.color = color;
     }
 
-    public boolean getAvailibility() {
-        return availibility;
+    public boolean getAvailability() {
+        return availability;
     }
 
-    public void setAvailibility(boolean availibility) {
-        this.availibility = availibility;
+    public void setAvailibality(boolean availability) {
+        this.availability = availability;
     }
 }

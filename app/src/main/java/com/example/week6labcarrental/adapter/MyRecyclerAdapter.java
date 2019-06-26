@@ -40,10 +40,10 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         viewHolder.category.setText(mData.get(position).getCategory());
-        viewHolder.availability.setText(String.valueOf(mData.get(position).getAvailibility()));
+        viewHolder.availability.setText(String.valueOf(mData.get(position).getAvailability()));
         viewHolder.carPriceDay.setText(String.valueOf(mData.get(position).getPricePerDay()));
         viewHolder.carPriceHour.setText(String.valueOf(mData.get(position).getPricePerHour()));
-        //viewHolder.seats.setText(mData.get(position).getSeats());
+        viewHolder.seats.setText(String.valueOf(mData.get(position).getSeats()));
         viewHolder.carModel.setText(mData.get(position).getCarModel());
         viewHolder.carMake.setText(mData.get(position).getCarMake());
         viewHolder.color.setText(mData.get(position).getColor());

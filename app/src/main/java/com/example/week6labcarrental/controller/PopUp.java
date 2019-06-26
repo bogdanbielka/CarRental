@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.week6labcarrental.R;
+import com.example.week6labcarrental.firebase.CarCollection;
 import com.example.week6labcarrental.model.Car;
 import com.example.week6labcarrental.ui.ManagerActivity;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -89,60 +90,45 @@ public class PopUp {
         });
         dialog.show();
     }
-    public static void openAddNewCarPopup(final FirebaseFirestore db, final Dialog dialog, final Context context, final FirebaseAuth mAuth) {
+    public static void openAddNewCarPopup(final Context context, final FirebaseFirestore db, final Dialog dialog) {
 
         dialog.setContentView(R.layout.add_new_car_popup);
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         ImageView closeBtn = dialog.findViewById(R.id.btnClose);
-                Map<String, Object> cars = new HashMap<>();
-        String ID =  UUID.randomUUID().toString();
-        EditText et2 = dialog.findViewById(R.id.carCategoryEdit);
-        String category = et2.getText().toString();
-        EditText et3 = dialog.findViewById(R.id.carPriceHourEdit);
-        String pricePerHour = et3.getText().toString();
-        EditText et4 = dialog.findViewById(R.id.carPriceDayEdit);
-        String pricePerDay = et4.getText().toString();
-        EditText et5 = dialog.findViewById(R.id.carMakerEdit);
-        String maker = et5.getText().toString();
-        EditText et6 = dialog.findViewById(R.id.carModelEdit);
-        String model = et6.getText().toString();
-        EditText et7 = dialog.findViewById(R.id.carColorEdit);
-        String color = et7.getText().toString();
-        CheckBox carAvailable = dialog.findViewById(R.id.carAvailableCheckBox);
-        boolean available = carAvailable.isChecked();
 
-//        cars.put(key[0], ID);
-//        cars.put(key[1], category);
-//        cars.put(key[2], pricePerHour);
-//        cars.put(key[3], pricePerDay);
-//        cars.put(key[4], maker);
-//        cars.put(key[5], model);
-//        cars.put(key[6], color);
-//        cars.put(key[7], available);
-
-        et2.setText("");
-        et3.setText("");
-        et4.setText("");
-        et5.setText("");
-        et6.setText("");
-        et7.setText("");
+        final String ID =  UUID.randomUUID().toString();
+        final EditText carCategoryEdit = dialog.findViewById(R.id.carCategoryEdit);
+        final EditText carPriceHourEdit = dialog.findViewById(R.id.carPriceHourEdit);
+        final EditText carPriceDayEdit = dialog.findViewById(R.id.carPriceDayEdit);
+        final EditText carMakerEdit = dialog.findViewById(R.id.carMakerEdit);
+        final EditText carModelEdit = dialog.findViewById(R.id.carModelEdit);
+        final EditText carColorEdit = dialog.findViewById(R.id.carColorEdit);
+        final CheckBox carAvailable = dialog.findViewById(R.id.carAvailableCheckBox);
+        final EditText carSeats = dialog.findViewById(R.id.carSeats);
         carAvailable.setChecked(true);
 
-        db.collection(ManagerActivity.COLLECTION_NAME)
-                .document(ID)
-                .set(cars)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("Add User", "DocumentSnapshot successfully written!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure( Exception e) {
-                        Log.w("Add User", "Error writing document", e);
-                    }
-                });
+        final Button addnew = dialog.findViewById(R.id.btnAddNew);
+        Button update = dialog.findViewById(R.id.btnUpdate);
+        update.setVisibility(View.GONE);
+        addnew.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Car car = new Car();
+                car.setCarId(ID);
+                car.setCarMake(carMakerEdit.getText().toString());
+                car.setCarModel(carModelEdit.getText().toString());
+                car.setCategory(carCategoryEdit.getText().toString());
+                car.setColor(carColorEdit.getText().toString());
+                car.setPricePerDay(Double.parseDouble(carPriceDayEdit.getText().toString()));
+                car.setPricePerHour(Double.parseDouble(carPriceHourEdit.getText().toString()));
+                car.setSeats(Integer.parseInt(carSeats.getText().toString()));
+                car.setAvailibality(carAvailable.isChecked());
+                // call the add new function from CarCollection
+                CarCollection.createAndUpdateCar(context,db, car, true);
+                //hide the dialog
+                dialog.dismiss();
+            }
+        });
 
         closeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -153,50 +139,50 @@ public class PopUp {
         dialog.show();
     }
 
-    public static void openUpdateCarPopup(FirebaseFirestore db, final Dialog dialog, ManagerActivity managerActivity, FirebaseAuth mAuth, Car clickedCar) {
+    public static void openUpdateCarPopup(final Context context, final FirebaseFirestore db, final Dialog dialog, final Car car) {
         dialog.setContentView(R.layout.add_new_car_popup);
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         ImageView closeBtn = dialog.findViewById(R.id.btnClose);
-        Map<String, Object> cars = new HashMap<>();
-        String ID =  UUID.randomUUID().toString();
-        EditText et2 = dialog.findViewById(R.id.carCategoryEdit);
-        String category = et2.getText().toString();
-        EditText et3 = dialog.findViewById(R.id.carPriceHourEdit);
-        String pricePerHour = et3.getText().toString();
-        EditText et4 = dialog.findViewById(R.id.carPriceDayEdit);
-        String pricePerDay = et4.getText().toString();
-        EditText et5 = dialog.findViewById(R.id.carMakerEdit);
-        String maker = et5.getText().toString();
-        EditText et6 = dialog.findViewById(R.id.carModelEdit);
-        String model = et6.getText().toString();
-        EditText et7 = dialog.findViewById(R.id.carColorEdit);
-        String color = et7.getText().toString();
-        CheckBox carAvailable = dialog.findViewById(R.id.carAvailableCheckBox);
-        boolean available = carAvailable.isChecked();
 
+        final EditText carCategoryEdit = dialog.findViewById(R.id.carCategoryEdit);
+        final EditText carPriceHourEdit = dialog.findViewById(R.id.carPriceHourEdit);
+        final EditText carPriceDayEdit = dialog.findViewById(R.id.carPriceDayEdit);
+        final EditText carMakerEdit = dialog.findViewById(R.id.carMakerEdit);
+        final EditText carModelEdit = dialog.findViewById(R.id.carModelEdit);
+        final EditText carColorEdit = dialog.findViewById(R.id.carColorEdit);
+        final CheckBox carAvailable = dialog.findViewById(R.id.carAvailableCheckBox);
+        final EditText carSeats = dialog.findViewById(R.id.carSeats);
 
-        et2.setText(clickedCar.getCategory());
-        et3.setText(String.valueOf( clickedCar.getPricePerHour()));
-        et4.setText("");
-        et5.setText("");
-        et6.setText("");
-        et7.setText("");
-        carAvailable.setChecked(true);
+        //set all fields
+        carAvailable.setChecked(car.getAvailability());
+        carPriceHourEdit.setText(String.valueOf(car.getPricePerHour()));
+        carPriceDayEdit.setText(String.valueOf(car.getPricePerDay()));
+        carMakerEdit.setText(car.getCarMake());
+        carModelEdit.setText(car.getCarModel());
+        carColorEdit.setText(car.getColor());
+        carSeats.setText(String.valueOf(car.getSeats()));
+        carCategoryEdit.setText(car.getCategory());
 
-//        db.collection(ManagerActivity.COLLECTION_NAME)
-//                .add(cars)
-//                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-//                    @Override
-//                    public void onSuccess(DocumentReference documentReference) {
-//                        //Log.d(Tag, "DocumentSnapshot added with ID: " + documentReference.getId());
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        //Log.d(Tag, "Error adding document " + e);
-//                    }
-//                });
+        final Button addnew = dialog.findViewById(R.id.btnAddNew);
+        Button update = dialog.findViewById(R.id.btnUpdate);
+        addnew.setVisibility(View.GONE);
+        update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                car.setCarMake(carMakerEdit.getText().toString());
+                car.setCarModel(carModelEdit.getText().toString());
+                car.setCategory(carCategoryEdit.getText().toString());
+                car.setColor(carColorEdit.getText().toString());
+                car.setPricePerDay(Double.parseDouble(carPriceDayEdit.getText().toString()));
+                car.setPricePerHour(Double.parseDouble(carPriceHourEdit.getText().toString()));
+                car.setSeats(Integer.parseInt(carSeats.getText().toString()));
+                car.setAvailibality(carAvailable.isChecked());
+                // call the update function from CarCollection
+                CarCollection.createAndUpdateCar(context, db, car, false);
+                //hide the dialog
+                dialog.dismiss();
+            }
+        });
 
         closeBtn.setOnClickListener(new View.OnClickListener() {
             @Override

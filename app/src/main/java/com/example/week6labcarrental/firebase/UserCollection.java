@@ -85,6 +85,12 @@ public class UserCollection {
                 });
 
     }
+
+    /**
+     * This function get all users in the users collection
+     * @param context context for broadcast
+     * @param db db instance
+     */
     public static void getAllUsers(final Context context, FirebaseFirestore db) {
         final ArrayList<User> users = new ArrayList<>();
         db.collection(COLLECTION_NAME)

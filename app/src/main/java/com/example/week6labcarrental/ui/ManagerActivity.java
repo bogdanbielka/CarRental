@@ -143,7 +143,7 @@ public class ManagerActivity extends AppCompatActivity implements  ItemClickList
             @Override
             public void onClick(View v) {
                 // show pop up
-                PopUp.openAddNewCarPopup(db,dialog, ManagerActivity.this,mAuth);
+                PopUp.openAddNewCarPopup(ManagerActivity.this, db, dialog);
             }
         });
 
@@ -164,6 +164,17 @@ public class ManagerActivity extends AppCompatActivity implements  ItemClickList
                         usersList = (ArrayList<User>) intent.getSerializableExtra("users_data");
                         userRecyclerAdapter.changeData(usersList);
                         userRecyclerAdapter.notifyDataSetChanged();
+                        break;
+                    case CarCollection.ADD_CAR_DATA_DONE :
+                        //get user Data from intent
+                        Car newCar = (Car) intent.getSerializableExtra("new_car_data");
+                        carsList.add(newCar);
+                        //carRecyclerAdapter.changeData(carsList);
+                        carRecyclerAdapter.notifyDataSetChanged();
+                        break;
+                    case CarCollection.UPDATE_CAR_DATA_DONE :
+
+                        carRecyclerAdapter.notifyDataSetChanged();
                         break;
 
                 }
@@ -240,6 +251,8 @@ public class ManagerActivity extends AppCompatActivity implements  ItemClickList
         IntentFilter filter = new IntentFilter();
         filter.addAction(CarCollection.LOAD_CAR_DATA_DONE);
         filter.addAction(UserCollection.LOAD_USER_LIST_DATA_DONE);
+        filter.addAction(CarCollection.ADD_CAR_DATA_DONE);
+        filter.addAction(CarCollection.UPDATE_CAR_DATA_DONE);
         registerReceiver(response,filter);
     }
 
@@ -249,7 +262,7 @@ public class ManagerActivity extends AppCompatActivity implements  ItemClickList
         switch (view.getId()) {
             case R.id.carItemLayout:
                 //open PopUp
-                PopUp.openUpdateCarPopup(db,dialog, ManagerActivity.this,mAuth, clickedCar);
+                PopUp.openUpdateCarPopup(ManagerActivity.this, db,dialog,  clickedCar);
                 break;
         }
 

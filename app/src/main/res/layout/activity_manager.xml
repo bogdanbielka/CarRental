@@ -98,7 +98,7 @@
             android:paddingRight="10dp"
             android:id="@+id/btnAddNew"
             android:layout_below="@id/carAvailableCheckBox"
-            android:text="Add New User"
+            android:text="Add New Car"
             android:textColor="@color/colorSecondary"
             android:background="@color/colorThird"
             />
