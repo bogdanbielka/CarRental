@@ -3,16 +3,29 @@ package com.example.week6labcarrental.controller;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.week6labcarrental.R;
+import com.example.week6labcarrental.firebase.CarCollection;
+import com.example.week6labcarrental.model.Car;
+import com.example.week6labcarrental.ui.ManagerActivity;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public class PopUp {
     /**
@@ -66,6 +79,108 @@ public class PopUp {
                 //Register new user
                 Authentication.registerNewUser(dialog,db,context, mAuth, progressDialog,emailString, pw, userName);
 
+            }
+        });
+
+        closeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+    public static void openAddNewCarPopup(final Context context, final FirebaseFirestore db, final Dialog dialog) {
+
+        dialog.setContentView(R.layout.add_new_car_popup);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        ImageView closeBtn = dialog.findViewById(R.id.btnClose);
+
+        final String ID =  UUID.randomUUID().toString();
+        final EditText carCategoryEdit = dialog.findViewById(R.id.carCategoryEdit);
+        final EditText carPriceHourEdit = dialog.findViewById(R.id.carPriceHourEdit);
+        final EditText carPriceDayEdit = dialog.findViewById(R.id.carPriceDayEdit);
+        final EditText carMakerEdit = dialog.findViewById(R.id.carMakerEdit);
+        final EditText carModelEdit = dialog.findViewById(R.id.carModelEdit);
+        final EditText carColorEdit = dialog.findViewById(R.id.carColorEdit);
+        final CheckBox carAvailable = dialog.findViewById(R.id.carAvailableCheckBox);
+        final EditText carSeats = dialog.findViewById(R.id.carSeats);
+        carAvailable.setChecked(true);
+
+        final Button addnew = dialog.findViewById(R.id.btnAddNew);
+        Button update = dialog.findViewById(R.id.btnUpdate);
+        update.setVisibility(View.GONE);
+        addnew.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Car car = new Car();
+                car.setCarId(ID);
+                car.setCarMake(carMakerEdit.getText().toString());
+                car.setCarModel(carModelEdit.getText().toString());
+                car.setCategory(carCategoryEdit.getText().toString());
+                car.setColor(carColorEdit.getText().toString());
+                car.setPricePerDay(Double.parseDouble(carPriceDayEdit.getText().toString()));
+                car.setPricePerHour(Double.parseDouble(carPriceHourEdit.getText().toString()));
+                car.setSeats(Integer.parseInt(carSeats.getText().toString()));
+                car.setAvailibality(carAvailable.isChecked());
+                // call the add new function from CarCollection
+                CarCollection.createAndUpdateCar(context,db, car, true);
+                //hide the dialog
+                dialog.dismiss();
+            }
+        });
+
+        closeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
+    public static void openUpdateCarPopup(final Context context, final FirebaseFirestore db, final Dialog dialog, final Car car) {
+        dialog.setContentView(R.layout.add_new_car_popup);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        ImageView closeBtn = dialog.findViewById(R.id.btnClose);
+
+        final EditText carCategoryEdit = dialog.findViewById(R.id.carCategoryEdit);
+        final EditText carPriceHourEdit = dialog.findViewById(R.id.carPriceHourEdit);
+        final EditText carPriceDayEdit = dialog.findViewById(R.id.carPriceDayEdit);
+        final EditText carMakerEdit = dialog.findViewById(R.id.carMakerEdit);
+        final EditText carModelEdit = dialog.findViewById(R.id.carModelEdit);
+        final EditText carColorEdit = dialog.findViewById(R.id.carColorEdit);
+        final CheckBox carAvailable = dialog.findViewById(R.id.carAvailableCheckBox);
+        final EditText carSeats = dialog.findViewById(R.id.carSeats);
+
+        //set all fields
+        carAvailable.setChecked(car.getAvailability());
+        carPriceHourEdit.setText(String.valueOf(car.getPricePerHour()));
+        carPriceDayEdit.setText(String.valueOf(car.getPricePerDay()));
+        carMakerEdit.setText(car.getCarMake());
+        carModelEdit.setText(car.getCarModel());
+        carColorEdit.setText(car.getColor());
+        carSeats.setText(String.valueOf(car.getSeats()));
+        carCategoryEdit.setText(car.getCategory());
+
+        final Button addnew = dialog.findViewById(R.id.btnAddNew);
+        Button update = dialog.findViewById(R.id.btnUpdate);
+        addnew.setVisibility(View.GONE);
+        update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                car.setCarMake(carMakerEdit.getText().toString());
+                car.setCarModel(carModelEdit.getText().toString());
+                car.setCategory(carCategoryEdit.getText().toString());
+                car.setColor(carColorEdit.getText().toString());
+                car.setPricePerDay(Double.parseDouble(carPriceDayEdit.getText().toString()));
+                car.setPricePerHour(Double.parseDouble(carPriceHourEdit.getText().toString()));
+                car.setSeats(Integer.parseInt(carSeats.getText().toString()));
+                car.setAvailibality(carAvailable.isChecked());
+                // call the update function from CarCollection
+                CarCollection.createAndUpdateCar(context, db, car, false);
+                //hide the dialog
+                dialog.dismiss();
             }
         });
 

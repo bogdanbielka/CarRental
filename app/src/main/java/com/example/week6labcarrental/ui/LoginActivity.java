@@ -49,6 +49,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         dialog = new Dialog(this);
         progressDialog = new ProgressDialog(this);
         // find resource id
+
         createAccount = findViewById(R.id.createAccount);
         createAccount.setOnClickListener(this);
         logIn = findViewById(R.id.login);
