@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import com.example.week6labcarrental.R;
 import com.example.week6labcarrental.model.Car;
@@ -62,7 +63,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
         TextView category, carMake, carModel, carPriceHour, carPriceDay, seats, availability, color;
-
+        ImageButton btn;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             category = itemView.findViewById(R.id.txtCategory);
@@ -73,10 +74,11 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
             seats = itemView.findViewById(R.id.txtSeats);
             availability = itemView.findViewById(R.id.txtAvailability);
             color = itemView.findViewById(R.id.txtColor);
+            btn = itemView.findViewById(R.id.deleteBtn);
 
             itemView.setOnClickListener(this);
-            itemView.setOnLongClickListener(this);
-            color.setOnLongClickListener(this);
+            //itemView.setOnLongClickListener(this);
+            btn.setOnLongClickListener(this);
         }
 
         @Override

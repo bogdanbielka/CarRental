@@ -55,6 +55,8 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
+import static com.example.week6labcarrental.firebase.UserCollection.getAllUsers;
+
 public class ManagerActivity extends AppCompatActivity implements  ItemClickListener {
     //declarations
     private FirebaseFirestore db;
@@ -230,7 +232,7 @@ public class ManagerActivity extends AppCompatActivity implements  ItemClickList
         //get all the cars
         CarCollection.getAllCars(this,db);
         //get all users
-        UserCollection.getAllUsers(this,db);
+        getAllUsers(this,db);
     }
 
     @Override
@@ -270,10 +272,50 @@ public class ManagerActivity extends AppCompatActivity implements  ItemClickList
 
     @Override
     public void onItemLongClick(View view, int position) {
-        Toast.makeText(this, "Long clicked", Toast.LENGTH_SHORT).show();
+        deleteData(carsList.get(position).getCarId(),position);
+        //Toast.makeText(this, "Long clicked", Toast.LENGTH_SHORT).show();
+
+        //Log.d("after delete:2",carsList.toString());
         //call the delete function
 
     }
+
+    public void deleteData(String cardId, final int position) {
+        UID = "";
+        db.collection("cars").whereEqualTo(key[0],cardId).get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                UID = document.getId();
+                                Log.d("Delete", UID);
+                                db.collection(COLLECTION_NAME).document(UID)
+                                        .delete()
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Log.d("Delete", "Success delete");
+                                                CarCollection.getAllCars(ManagerActivity.this,db);
+                                                //Log.d("after delete:1",carsList.toString());
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Log.w("Delete", "Error delete", e);
+                                            }
+                                        });
+                            }
+                        } else {
+                            Log.w("Delete", "Error getting document.", task.getException());
+                        }
+                    }
+                });
+
+    }
+
+
 //====================End
 //
 //    private void addData() {
