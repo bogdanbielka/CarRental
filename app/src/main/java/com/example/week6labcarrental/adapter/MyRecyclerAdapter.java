@@ -10,17 +10,18 @@ import android.widget.TextView;
 import com.example.week6labcarrental.R;
 import com.example.week6labcarrental.model.Car;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.ViewHolder> {
     public static final String TAG = "MyRecyclerAdapter";
     private ItemClickListener mClickListener;
-    private List<Car> mData;
+    private ArrayList<Car> mData;
 
     public MyRecyclerAdapter() {
     }
 
-    public MyRecyclerAdapter( List<Car> data, ItemClickListener mClickListener){
+    public MyRecyclerAdapter( ArrayList<Car> data, ItemClickListener mClickListener){
         this.mData = data;
         this.mClickListener = mClickListener;
     }
@@ -56,7 +57,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
             return mData.size();
         } return 0;
     }
-    public void changeData( List<Car> data){
+    public void changeData( ArrayList<Car> data){
         this.mData = data;
     }
 
