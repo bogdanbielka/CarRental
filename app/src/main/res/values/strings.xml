@@ -24,5 +24,15 @@
     <string name="textCarAvailable">Available : </string>
     <string name="hintCarAvailable">Select true or false here</string>
 
+    <string-array name="car_category_list">
+        <item>Select the car category here</item>
+        <item>SUV</item>
+        <item>Hatchback</item>
+        <item>Truck</item>
+        <item>Van</item>
+        <item>Sedan</item>
+        <item>Sports Car</item>
+    </string-array>
+
 
 </resources>

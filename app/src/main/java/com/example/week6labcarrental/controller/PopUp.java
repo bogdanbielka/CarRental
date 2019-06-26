@@ -7,10 +7,12 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.week6labcarrental.R;
@@ -54,30 +56,30 @@ public class PopUp {
                 String emailString = email.getText().toString().trim();
                 String pw = txtpassword.getText().toString().trim();
                 String pw1 = confirmPassword.getText().toString().trim();
-                if(TextUtils.isEmpty(emailString)){
-                    Toast.makeText(context,"Please fill up email",Toast.LENGTH_SHORT).show();
+                if (TextUtils.isEmpty(emailString)) {
+                    Toast.makeText(context, "Please fill up email", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(TextUtils.isEmpty(userName)){
-                    Toast.makeText(context,"Please fill up name",Toast.LENGTH_SHORT).show();
+                if (TextUtils.isEmpty(userName)) {
+                    Toast.makeText(context, "Please fill up name", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(TextUtils.isEmpty(pw)){
-                    Toast.makeText(context,"Please fill up password",Toast.LENGTH_SHORT).show();
+                if (TextUtils.isEmpty(pw)) {
+                    Toast.makeText(context, "Please fill up password", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(TextUtils.isEmpty(pw1)){
-                    Toast.makeText(context,"Please fill up confirm password",Toast.LENGTH_SHORT).show();
+                if (TextUtils.isEmpty(pw1)) {
+                    Toast.makeText(context, "Please fill up confirm password", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(!pw.equals(pw1)){
-                    Toast.makeText(context,"Password doesn't match. Try Again",Toast.LENGTH_SHORT).show();
+                if (!pw.equals(pw1)) {
+                    Toast.makeText(context, "Password doesn't match. Try Again", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 progressDialog.setMessage("Register...");
                 progressDialog.show();
                 //Register new user
-                Authentication.registerNewUser(dialog,db,context, mAuth, progressDialog,emailString, pw, userName);
+                Authentication.registerNewUser(dialog, db, context, mAuth, progressDialog, emailString, pw, userName);
 
             }
         });
@@ -90,14 +92,15 @@ public class PopUp {
         });
         dialog.show();
     }
+
     public static void openAddNewCarPopup(final Context context, final FirebaseFirestore db, final Dialog dialog) {
 
         dialog.setContentView(R.layout.add_new_car_popup);
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         ImageView closeBtn = dialog.findViewById(R.id.btnClose);
 
-        final String ID =  UUID.randomUUID().toString();
-        final EditText carCategoryEdit = dialog.findViewById(R.id.carCategoryEdit);
+        final String ID = UUID.randomUUID().toString();
+        final Spinner carCategoryEdit = dialog.findViewById(R.id.carCategoryEdit);
         final EditText carPriceHourEdit = dialog.findViewById(R.id.carPriceHourEdit);
         final EditText carPriceDayEdit = dialog.findViewById(R.id.carPriceDayEdit);
         final EditText carMakerEdit = dialog.findViewById(R.id.carMakerEdit);
@@ -107,24 +110,51 @@ public class PopUp {
         final EditText carSeats = dialog.findViewById(R.id.carSeats);
         carAvailable.setChecked(true);
 
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context,
+                R.array.car_category_list, R.layout.spinner_item);
+        adapter.setDropDownViewResource(R.layout.spinner_item);
+        carCategoryEdit.setAdapter(adapter);
+
         final Button addnew = dialog.findViewById(R.id.btnAddNew);
         Button update = dialog.findViewById(R.id.btnUpdate);
         update.setVisibility(View.GONE);
         addnew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(carCategoryEdit.getSelectedItemPosition()==0){
+                    Toast.makeText(context, "Please select a category.", Toast.LENGTH_SHORT).show();
+                    return;
+                }if(carMakerEdit.getText().toString().isEmpty()){
+                    Toast.makeText(context, "Please enter a car maker.", Toast.LENGTH_SHORT).show();
+                    return;
+                }if(carModelEdit.getText().toString().isEmpty()){
+                    Toast.makeText(context, "Please enter a car model.", Toast.LENGTH_SHORT).show();
+                    return;
+                }if(carColorEdit.getText().toString().isEmpty()) {
+                    Toast.makeText(context, "Please enter a car color.", Toast.LENGTH_SHORT).show();
+                    return;
+                }if(carPriceDayEdit.getText().toString().isEmpty()) {
+                    Toast.makeText(context, "Please enter a daily price.", Toast.LENGTH_SHORT).show();
+                    return;
+                }if(carPriceHourEdit.getText().toString().isEmpty()) {
+                    Toast.makeText(context, "Please enter a hourly price.", Toast.LENGTH_SHORT).show();
+                    return;
+                }if(carSeats.getText().toString().isEmpty()) {
+                    Toast.makeText(context, "Please enter car seats.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 Car car = new Car();
                 car.setCarId(ID);
                 car.setCarMake(carMakerEdit.getText().toString());
                 car.setCarModel(carModelEdit.getText().toString());
-                car.setCategory(carCategoryEdit.getText().toString());
+                car.setCategory(carCategoryEdit.getSelectedItem().toString());
                 car.setColor(carColorEdit.getText().toString());
                 car.setPricePerDay(Double.parseDouble(carPriceDayEdit.getText().toString()));
                 car.setPricePerHour(Double.parseDouble(carPriceHourEdit.getText().toString()));
                 car.setSeats(Integer.parseInt(carSeats.getText().toString()));
                 car.setAvailibality(carAvailable.isChecked());
                 // call the add new function from CarCollection
-                CarCollection.createAndUpdateCar(context,db, car, true);
+                CarCollection.createAndUpdateCar(context, db, car, true);
                 //hide the dialog
                 dialog.dismiss();
             }
@@ -144,7 +174,7 @@ public class PopUp {
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         ImageView closeBtn = dialog.findViewById(R.id.btnClose);
 
-        final EditText carCategoryEdit = dialog.findViewById(R.id.carCategoryEdit);
+        final Spinner carCategoryEdit = dialog.findViewById(R.id.carCategoryEdit);
         final EditText carPriceHourEdit = dialog.findViewById(R.id.carPriceHourEdit);
         final EditText carPriceDayEdit = dialog.findViewById(R.id.carPriceDayEdit);
         final EditText carMakerEdit = dialog.findViewById(R.id.carMakerEdit);
@@ -152,6 +182,11 @@ public class PopUp {
         final EditText carColorEdit = dialog.findViewById(R.id.carColorEdit);
         final CheckBox carAvailable = dialog.findViewById(R.id.carAvailableCheckBox);
         final EditText carSeats = dialog.findViewById(R.id.carSeats);
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context,
+                R.array.car_category_list, R.layout.spinner_item);
+        adapter.setDropDownViewResource(R.layout.spinner_item);
+        carCategoryEdit.setAdapter(adapter);
 
         //set all fields
         carAvailable.setChecked(car.getAvailability());
@@ -161,7 +196,29 @@ public class PopUp {
         carModelEdit.setText(car.getCarModel());
         carColorEdit.setText(car.getColor());
         carSeats.setText(String.valueOf(car.getSeats()));
-        carCategoryEdit.setText(car.getCategory());
+        int position=0;
+        switch (car.getCategory()){
+            case "SUV":
+                position =1;
+                break;
+            case "Hatchback":
+                position =2;
+                break;
+            case "Truck":
+                position =3;
+                break;
+            case "Van":
+                position =4;
+                break;
+            case "Sedan":
+                position =5;
+                break;
+            case "Sports Car":
+                position =6;
+                break;
+
+        }
+        carCategoryEdit.setSelection(position);
 
         final Button addnew = dialog.findViewById(R.id.btnAddNew);
         Button update = dialog.findViewById(R.id.btnUpdate);
@@ -169,9 +226,31 @@ public class PopUp {
         update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(carCategoryEdit.getSelectedItemPosition()==0){
+                    Toast.makeText(context, "Please select a category.", Toast.LENGTH_SHORT).show();
+                    return;
+                }if(carMakerEdit.getText().toString().isEmpty()){
+                    Toast.makeText(context, "Please enter a car maker.", Toast.LENGTH_SHORT).show();
+                    return;
+                }if(carModelEdit.getText().toString().isEmpty()){
+                    Toast.makeText(context, "Please enter a car model.", Toast.LENGTH_SHORT).show();
+                    return;
+                }if(carColorEdit.getText().toString().isEmpty()) {
+                    Toast.makeText(context, "Please enter a car color.", Toast.LENGTH_SHORT).show();
+                    return;
+                }if(carPriceDayEdit.getText().toString().isEmpty()) {
+                    Toast.makeText(context, "Please enter a daily price.", Toast.LENGTH_SHORT).show();
+                    return;
+                }if(carPriceHourEdit.getText().toString().isEmpty()) {
+                    Toast.makeText(context, "Please enter a hourly price.", Toast.LENGTH_SHORT).show();
+                    return;
+                }if(carSeats.getText().toString().isEmpty()) {
+                    Toast.makeText(context, "Please enter car seats.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 car.setCarMake(carMakerEdit.getText().toString());
                 car.setCarModel(carModelEdit.getText().toString());
-                car.setCategory(carCategoryEdit.getText().toString());
+                car.setCategory(carCategoryEdit.getSelectedItem().toString());
                 car.setColor(carColorEdit.getText().toString());
                 car.setPricePerDay(Double.parseDouble(carPriceDayEdit.getText().toString()));
                 car.setPricePerHour(Double.parseDouble(carPriceHourEdit.getText().toString()));
