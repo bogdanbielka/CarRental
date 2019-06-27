@@ -98,6 +98,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
 
             return true;
         }
+
     }
 
     // allows clicks events to be caught
