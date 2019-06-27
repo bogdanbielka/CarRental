@@ -17,60 +17,32 @@
         android:padding="10dp"
         android:background="@color/gray" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/btnPickup"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Pick up"
-            android:textColor="@color/black" />
-        <Button
-            android:id="@+id/btnReturn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:layout_weight="1"
-            android:text="Return"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="5dp">
-
-        <TextView
-            android:id="@+id/txtPickup"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:text=""/>
-
-        <TextView
-            android:id="@+id/txtReturn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:text=""
-            android:textColor="@color/black" />
-    </LinearLayout>
     <Button
-        android:id="@+id/btnReserve"
+        android:id="@+id/btnPickup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Pick up"
+        android:textColor="@color/black" />
+
+    <TextView
+        android:id="@+id/txtPickup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:gravity="center_horizontal"
+        android:text=""/>
+
+
+    <Button
+        android:id="@+id/btnContinue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/black"
         android:text="Continue"/>
 
-    <ListView
-        android:id="@+id/availablecars"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/myRec"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_margin="10dp" />
 </LinearLayout>
