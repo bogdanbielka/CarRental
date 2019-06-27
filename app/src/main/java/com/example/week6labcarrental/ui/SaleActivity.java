@@ -124,7 +124,10 @@ public class SaleActivity extends AppCompatActivity implements ItemClickListener
     public void onItemClick(View view, int position) {
         Car clickedCar = carsList.get(position);
         Intent i = new Intent(this,sale2.class);
-        i.putExtra("car",clickedCar);
+        i.putExtra("make",clickedCar.getCarMake());
+        i.putExtra("model",clickedCar.getCarModel());
+        i.putExtra("pHour",clickedCar.getPricePerHour());
+        i.putExtra("pDay",clickedCar.getPricePerDay());
         startActivity(i);
     }
 
