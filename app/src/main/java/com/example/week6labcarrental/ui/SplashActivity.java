@@ -60,6 +60,8 @@ public class SplashActivity extends AppCompatActivity {
         if(currentUser != null) {
             // get user data
             UserCollection.getUserInformation(SplashActivity.this, db, currentUser.getUid());
+        } else {
+            startActivity(new Intent(SplashActivity.this, LoginActivity.class));
         }
     }
     @Override
