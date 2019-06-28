@@ -20,6 +20,7 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 
 import com.example.week6labcarrental.R;
+import com.example.week6labcarrental.adapter.CarRecyclerAdapter;
 import com.example.week6labcarrental.adapter.ItemClickListener;
 import com.example.week6labcarrental.adapter.MyRecyclerAdapter;
 import com.example.week6labcarrental.controller.Authentication;
@@ -53,7 +54,7 @@ public class ClientActivity extends AppCompatActivity implements ItemClickListen
 
     BroadcastReceiver response;
     RecyclerView recyclerView;
-    MyRecyclerAdapter carRecyclerAdapter;
+    CarRecyclerAdapter carRecyclerAdapter2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,8 +65,8 @@ public class ClientActivity extends AppCompatActivity implements ItemClickListen
         carsList = new ArrayList<>();
         initialize();
         recyclerView =  findViewById(R.id.myRec);
-        carRecyclerAdapter = new MyRecyclerAdapter(carsList, this);
-        recyclerView.setAdapter(carRecyclerAdapter);
+        carRecyclerAdapter2 = new CarRecyclerAdapter(carsList, this);
+        recyclerView.setAdapter(carRecyclerAdapter2);
         recyclerView.setLayoutManager(new GridLayoutManager(ClientActivity.this, 1));
 
         btnContinue = findViewById(R.id.btnContinue);
@@ -120,8 +121,8 @@ public class ClientActivity extends AppCompatActivity implements ItemClickListen
                         //get car Data from intent
                         carsList = (ArrayList<Car>) intent.getSerializableExtra("cars_data");
                         Log.i("carlist", String.valueOf(carsList.size()));
-                        carRecyclerAdapter.changeData(carsList);
-                        carRecyclerAdapter.notifyDataSetChanged();
+                        carRecyclerAdapter2.changeData(carsList);
+                        carRecyclerAdapter2.notifyDataSetChanged();
                         break;
                 }
             }
