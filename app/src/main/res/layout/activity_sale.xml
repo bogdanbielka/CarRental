@@ -13,7 +13,7 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/btnPickup4"
+            android:id="@+id/btnPickup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -21,7 +21,7 @@
             android:textColor="@color/black" />
 
         <Button
-            android:id="@+id/btnReturn4"
+            android:id="@+id/btnReturn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -36,7 +36,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/txtPickup8"
+            android:id="@+id/txtPickup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -45,7 +45,7 @@
             android:textColor="@color/black" />
 
         <TextView
-            android:id="@+id/txtReturn8"
+            android:id="@+id/txtReturn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"

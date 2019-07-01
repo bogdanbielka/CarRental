@@ -1,5 +1,6 @@
 package com.example.week6labcarrental.ui;
 
+import android.app.DatePickerDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +13,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.TextView;
 
 import com.example.week6labcarrental.R;
 import com.example.week6labcarrental.adapter.ItemClickListener;
@@ -26,6 +30,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import static com.google.common.reflect.Reflection.initialize;
 
@@ -37,6 +42,7 @@ public class SaleActivity extends AppCompatActivity implements ItemClickListener
     ArrayList<Car> carsList;
     private final String[] key = {"carId", "category", "pricePerHour", "pricePerDay", "carMake", "carModel", "color", "availability"};
     BroadcastReceiver response;
+    String pickupdate,returndate;
     RecyclerView recyclerView;
     MyRecyclerAdapter carRecyclerAdapter;
 
@@ -48,6 +54,54 @@ public class SaleActivity extends AppCompatActivity implements ItemClickListener
         mAuth = FirebaseAuth.getInstance();
         carsList = new ArrayList<>();
         initialize();
+
+        Calendar c = Calendar.getInstance();
+        final int year = c.get(Calendar.YEAR);
+        final int month = c.get(Calendar.MONTH);
+        final int day = c.get(Calendar.DAY_OF_MONTH);
+        Button btnPickup = findViewById(R.id.btnPickup);
+        Button btnReturn = findViewById(R.id.btnReturn);
+        final TextView txtpickup = findViewById(R.id.txtPickup);
+        final TextView txtreturn = findViewById(R.id.txtReturn);
+
+        btnPickup.setOnClickListener(new View.OnClickListener() {
+            Calendar cal = Calendar.getInstance();
+            @Override
+            public void onClick(View v) {
+                DatePickerDialog datePickerDialog = new DatePickerDialog(
+                        SaleActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int day) {
+                        month += 1;
+                        String date = day + "/" + month + "/" + year;
+                        pickupdate = date;
+                        txtpickup.setText(date);
+                    }
+                }, year, month, day);
+                datePickerDialog.getDatePicker().setMinDate(cal.getTimeInMillis());
+                datePickerDialog.show();
+            }
+        });
+
+        btnReturn.setOnClickListener(new View.OnClickListener() {
+            Calendar cal = Calendar.getInstance();
+            @Override
+            public void onClick(View v) {
+                DatePickerDialog datePickerDialog = new DatePickerDialog(
+                        SaleActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int day) {
+                        month += 1;
+                        String date = day + "/" + month + "/" + year;
+                        pickupdate = date;
+                        txtreturn.setText(date);
+                    }
+                }, year, month, day);
+                datePickerDialog.getDatePicker().setMinDate(cal.getTimeInMillis());
+                datePickerDialog.show();
+            }
+        });
+
         recyclerView =  findViewById(R.id.myRec);
         carRecyclerAdapter = new MyRecyclerAdapter(carsList, this);
         recyclerView.setAdapter(carRecyclerAdapter);
@@ -124,7 +178,10 @@ public class SaleActivity extends AppCompatActivity implements ItemClickListener
     public void onItemClick(View view, int position) {
         Car clickedCar = carsList.get(position);
         Intent i = new Intent(this,sale2.class);
-        i.putExtra("car",clickedCar);
+        i.putExtra("make",clickedCar.getCarMake());
+        i.putExtra("model",clickedCar.getCarModel());
+        i.putExtra("pHour",clickedCar.getPricePerHour());
+        i.putExtra("pDay",clickedCar.getPricePerDay());
         startActivity(i);
     }
 
