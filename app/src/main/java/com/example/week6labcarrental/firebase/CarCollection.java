@@ -78,8 +78,50 @@ public class CarCollection {
                                 car.setAvailibality(doc.getBoolean("availability"));
                                 car.setCarId(doc.getString("carId"));
                                 car.setSeats(doc.getLong("seats").intValue());
+
                                 //add car to list
                                 cars.add(car);
+                            }
+                        } else {
+                            Log.w("load doc", "Error getting documents.", task.getException());
+                        }
+                        //Broadcast the result
+                        Intent broadcast = new Intent();
+
+                        broadcast.setAction(LOAD_CAR_DATA_DONE);
+                        broadcast.putExtra("cars_data",cars);
+
+                        context.sendBroadcast(broadcast);
+                    }
+                });
+        return cars;
+    }
+
+    public static ArrayList<Car> getAllAvailableCars(final Context context, FirebaseFirestore db) {
+        final ArrayList<Car> cars = new ArrayList<>();
+        db.collection(COLLECTION_NAME)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete( Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot doc : task.getResult()) {
+                                Car car = new Car();
+                                Log.d("load doc", doc.getId() + " => " + doc.getData());
+                                car.setCategory(doc.getString("category"));
+                                car.setCarModel(doc.getString("carModel"));
+                                car.setCarMake(doc.getString("carMake"));
+                                car.setColor(doc.getString("color"));
+                                car.setPricePerDay(doc.getLong("pricePerDay"));
+                                car.setPricePerHour(doc.getLong("pricePerHour"));
+                                car.setAvailibality(doc.getBoolean("availability"));
+                                car.setCarId(doc.getString("carId"));
+                                car.setSeats(doc.getLong("seats").intValue());
+                                //add available cars to list
+                                if(car.getAvailability() == true){
+                                    cars.add(car);
+                                }
+
                             }
                         } else {
                             Log.w("load doc", "Error getting documents.", task.getException());

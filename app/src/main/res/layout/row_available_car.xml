@@ -30,7 +30,7 @@
             android:textColor="#FFF"
             android:textAlignment="textEnd"
             android:layout_weight="1"
-            android:text="Availability:" />
+            android:text="Car Availability:" />
         <TextView
             android:id="@+id/txtAvailableInfo"
             android:layout_width="wrap_content"

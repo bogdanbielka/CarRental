@@ -176,7 +176,7 @@ public class ClientActivity extends AppCompatActivity implements ItemClickListen
         FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder().build();
         db.setFirestoreSettings(settings);
         //get all the cars
-        CarCollection.getAllCars(this,db);
+        CarCollection.getAllAvailableCars(this,db);
     }
 
     @Override
