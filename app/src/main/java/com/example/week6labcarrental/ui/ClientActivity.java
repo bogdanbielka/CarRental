@@ -5,8 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -22,12 +20,10 @@ import android.widget.TextView;
 import com.example.week6labcarrental.R;
 import com.example.week6labcarrental.adapter.CarRecyclerAdapter;
 import com.example.week6labcarrental.adapter.ItemClickListener;
-import com.example.week6labcarrental.adapter.MyRecyclerAdapter;
 import com.example.week6labcarrental.controller.Authentication;
 import com.example.week6labcarrental.firebase.CarCollection;
 import com.example.week6labcarrental.model.Car;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 
@@ -182,7 +178,7 @@ public class ClientActivity extends AppCompatActivity implements ItemClickListen
     @Override
     public void onItemClick(View view, int position) {
         Car clickedCar = carsList.get(position);
-        Intent i = new Intent(this,sale2.class);
+        Intent i = new Intent(this, SaleActivity2.class);
         i.putExtra("car",clickedCar);
         startActivity(i);
     }

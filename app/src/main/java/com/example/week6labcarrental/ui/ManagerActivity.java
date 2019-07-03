@@ -207,15 +207,15 @@ public class ManagerActivity extends AppCompatActivity implements  ItemClickList
                     ArrayList<User> searchResultUser = new ArrayList<>();
                     for (int l = 0; l < carsList.size(); l++) {
                         Log.d("carlist",carsList.get(l).getCarMake());
-                        if (carsList.get(l).getCarId().equals(searchText.getText().toString()) ||
-                                carsList.get(l).getCategory().equals(searchText.getText().toString()) ||
-                                carsList.get(l).getCarMake().equals(searchText.getText().toString()) ||
-                                carsList.get(l).getCarModel().equals(searchText.getText().toString()) ||
-                                String.valueOf(carsList.get(l).getPricePerHour()).equals(searchText.getText().toString()) ||
-                                String.valueOf(carsList.get(l).getPricePerDay()).equals(searchText.getText().toString()) ||
-                                String.valueOf(carsList.get(l).getSeats()).equals(searchText.getText().toString()) ||
-                                carsList.get(l).getColor().toString().equals(searchText.getText().toString()) ||
-                                Boolean.toString(carsList.get(l).getAvailability()).equals(searchText.getText().toString())) {
+                        if (carsList.get(l).getCarId().contains(searchText.getText().toString()) ||
+                                carsList.get(l).getCategory().contains(searchText.getText().toString()) ||
+                                carsList.get(l).getCarMake().contains(searchText.getText().toString()) ||
+                                carsList.get(l).getCarModel().contains(searchText.getText().toString()) ||
+                                String.valueOf(carsList.get(l).getPricePerHour()).contains(searchText.getText().toString()) ||
+                                String.valueOf(carsList.get(l).getPricePerDay()).contains(searchText.getText().toString()) ||
+                                String.valueOf(carsList.get(l).getSeats()).contains(searchText.getText().toString()) ||
+                                carsList.get(l).getColor().toString().contains(searchText.getText().toString()) ||
+                                Boolean.toString(carsList.get(l).getAvailability()).contains(searchText.getText().toString())) {
                             searchResult.add(carsList.get(l));
 
                             Log.d(" IN LOOP carlist",carsList.get(l).getCarMake());
@@ -223,10 +223,10 @@ public class ManagerActivity extends AppCompatActivity implements  ItemClickList
                     }
                     for (int l = 0; l < usersList.size(); l++) {
                         Log.d("userList",usersList.get(l).getFullName());
-                        if (usersList.get(l).getUserId().equals(searchText.getText().toString()) ||
-                                usersList.get(l).getFullName().equals(searchText.getText().toString()) ||
-                                String.valueOf(usersList.get(l).getRole()).equals(searchText.getText().toString()) ||
-                                usersList.get(l).getEmail().equals(searchText.getText().toString()) ||
+                        if (usersList.get(l).getUserId().contains(searchText.getText().toString()) ||
+                                usersList.get(l).getFullName().contains(searchText.getText().toString()) ||
+                                String.valueOf(usersList.get(l).getRole()).contains(searchText.getText().toString()) ||
+                                usersList.get(l).getEmail().contains(searchText.getText().toString()) ||
                                 usersList.get(l).getClass().equals(searchText.getText().toString())) {
                             searchResultUser.add(usersList.get(l));
 

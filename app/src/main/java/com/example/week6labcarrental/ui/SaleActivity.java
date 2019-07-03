@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -17,30 +19,33 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.week6labcarrental.R;
 import com.example.week6labcarrental.adapter.ItemClickListener;
 import com.example.week6labcarrental.adapter.MyRecyclerAdapter;
 import com.example.week6labcarrental.controller.Authentication;
+import com.example.week6labcarrental.controller.ProcessData;
 import com.example.week6labcarrental.firebase.CarCollection;
-import com.example.week6labcarrental.firebase.UserCollection;
+import com.example.week6labcarrental.fragment.CarListFragment;
+import com.example.week6labcarrental.fragment.CustomerNeedsFragment;
 import com.example.week6labcarrental.model.Car;
+import com.example.week6labcarrental.model.CustomerNeeds;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import static com.google.common.reflect.Reflection.initialize;
-
-public class SaleActivity extends AppCompatActivity implements ItemClickListener  {
+public class SaleActivity extends AppCompatActivity implements ItemClickListener, CustomerNeedsFragment.OnFragmentInteractionListener
+                ,CarListFragment.OnFragmentInteractionListener
+{
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     public static final String COLLECTION_NAME = "cars";
-    ArrayList<Car> carsList;
+    ArrayList<Car> carsList, carNeedList;
     private final String[] key = {"carId", "category", "pricePerHour", "pricePerDay", "carMake", "carModel", "color", "availability"};
     BroadcastReceiver response;
     String pickupdate,returndate;
@@ -57,66 +62,18 @@ public class SaleActivity extends AppCompatActivity implements ItemClickListener
         carsList = new ArrayList<>();
         initialize();
 
-        Calendar c = Calendar.getInstance();
-        final int year = c.get(Calendar.YEAR);
-        final int month = c.get(Calendar.MONTH);
-        final int day = c.get(Calendar.DAY_OF_MONTH);
-        Button btnPickup = findViewById(R.id.btnPickup);
-        //Button btnReturn = findViewById(R.id.btnReturn);
-        final TextView txtpickup = findViewById(R.id.txtPickup);
-        //final TextView txtreturn = findViewById(R.id.txtReturn);
-        final String MY_PREFS_NAME = "MyPrefsFile";
-        final SharedPreferences.Editor editor = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
+        FragmentManager fm = getSupportFragmentManager();
 
-        btnPickup.setOnClickListener(new View.OnClickListener() {
-            Calendar cal = Calendar.getInstance();
-            @Override
-            public void onClick(View v) {
-                DatePickerDialog datePickerDialog = new DatePickerDialog(
-                        SaleActivity.this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int month, int day) {
-                        month += 1;
-                        String date = day + "/" + month + "/" + year;
-                        pickupdate = date;
-                        txtpickup.setText(date);
-                        //i.putExtra("datePickup",date);
-                        editor.putString("datePickup",date);
-                        editor.apply();
-                    }
-                }, year, month, day);
-                datePickerDialog.getDatePicker().setMinDate(cal.getTimeInMillis());
-                datePickerDialog.show();
-            }
-        });
+        FragmentTransaction ft = fm.beginTransaction();
+        CustomerNeedsFragment customerNeedsFragment = new CustomerNeedsFragment();
 
-        /*btnReturn.setOnClickListener(new View.OnClickListener() {
-            Calendar cal = Calendar.getInstance();
-            @Override
-            public void onClick(View v) {
-                DatePickerDialog datePickerDialog = new DatePickerDialog(
-                        SaleActivity.this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int month, int day) {
-                        month += 1;
-                        String date = day + "/" + month + "/" + year;
-                        pickupdate = date;
-                        txtreturn.setText(date);
-                        //i.putExtra("dateReturn",date);
-                        editor.putString("dateReturn",date);
-                        editor.apply();
-                    }
-                }, year, month, day);
-                datePickerDialog.getDatePicker().setMinDate(cal.getTimeInMillis());
-                datePickerDialog.show();
-            }
-        });*/
-
-        recyclerView =  findViewById(R.id.myRec);
-        carRecyclerAdapter = new MyRecyclerAdapter(carsList, this);
-        recyclerView.setAdapter(carRecyclerAdapter);
-        recyclerView.setLayoutManager(new GridLayoutManager(SaleActivity.this, 1));
-
+        ft.add(R.id.fragmentContainer, customerNeedsFragment.newInstance());
+        ft.commit();
+//        recyclerView =  findViewById(R.id.myRec);
+//        carRecyclerAdapter = new MyRecyclerAdapter(carsList, this);
+//        recyclerView.setAdapter(carRecyclerAdapter);
+//        recyclerView.setLayoutManager(new GridLayoutManager(SaleActivity.this, 1));
+//
         response = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -125,8 +82,8 @@ public class SaleActivity extends AppCompatActivity implements ItemClickListener
                         //get car Data from intent
                         carsList = (ArrayList<Car>) intent.getSerializableExtra("cars_data");
                         Log.i("carlist", String.valueOf(carsList.size()));
-                        carRecyclerAdapter.changeData(carsList);
-                        carRecyclerAdapter.notifyDataSetChanged();
+//                        carRecyclerAdapter.changeData(carsList);
+//                        carRecyclerAdapter.notifyDataSetChanged();
                         break;
                 }
             }
@@ -187,7 +144,7 @@ public class SaleActivity extends AppCompatActivity implements ItemClickListener
     @Override
     public void onItemClick(View view, int position) {
         Car clickedCar = carsList.get(position);
-        Intent i = new Intent(this,sale2.class);
+        Intent i = new Intent(this, SaleActivity2.class);
         i.putExtra("make",clickedCar.getCarMake());
         i.putExtra("model",clickedCar.getCarModel());
         i.putExtra("pHour",clickedCar.getPricePerHour());
@@ -198,5 +155,28 @@ public class SaleActivity extends AppCompatActivity implements ItemClickListener
     @Override
     public void onItemLongClick(View view, int position) {
 
+    }
+
+    @Override
+    public void onProvideCustomerNeeds(CustomerNeeds needs) {
+        carNeedList = ProcessData.processCustomerNeed(needs, carsList);
+
+        FragmentManager fm = getSupportFragmentManager();
+
+        FragmentTransaction ft = fm.beginTransaction();
+        CarListFragment carListFragment = new CarListFragment();
+
+        ft.replace(R.id.fragmentContainer, carListFragment.newInstance(carNeedList));
+        ft.commit();
+        if(carNeedList == null) {
+            Toast.makeText(this, "No Car found", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onCarItemListener(Car car) {
+        Intent intent = new Intent(SaleActivity.this, SaleActivity2.class);
+        intent.putExtra("Cardata", car);
+        startActivity(intent);
     }
 }
