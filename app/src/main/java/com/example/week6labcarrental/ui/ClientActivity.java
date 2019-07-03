@@ -89,6 +89,7 @@ public class ClientActivity extends AppCompatActivity implements ItemClickListen
 
         btnPickup.setOnClickListener(new View.OnClickListener() {
             Calendar cal = Calendar.getInstance();
+
             @Override
             public void onClick(View v) {
                 DatePickerDialog datePickerDialog = new DatePickerDialog(
