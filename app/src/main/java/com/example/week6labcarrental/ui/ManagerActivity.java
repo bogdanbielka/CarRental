@@ -57,7 +57,7 @@ import javax.annotation.Nullable;
 
 import static com.example.week6labcarrental.firebase.UserCollection.getAllUsers;
 
-public class ManagerActivity extends AppCompatActivity implements  ItemClickListener {
+public class ManagerActivity extends AppCompatActivity implements ItemClickListener {
     //declarations
     private FirebaseFirestore db;
     public static final String COLLECTION_NAME = "cars";
@@ -79,10 +79,15 @@ public class ManagerActivity extends AppCompatActivity implements  ItemClickList
     //Recycler View
     RecyclerView recyclerView;
     MyRecyclerAdapter carRecyclerAdapter;
+    MyRecyclerAdapter searchRecycleAdapterCar;
     UserRecyclerAdapter userRecyclerAdapter;
+    UserRecyclerAdapter searchRecycleAdapterUser;
     ItemClickListener itemClickListener;
 
     Button addNewUser;
+    Button searchBtn;
+    EditText searchText;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,10 +100,14 @@ public class ManagerActivity extends AppCompatActivity implements  ItemClickList
 
         searchBox = findViewById(R.id.searchBox);
         addNewUser = findViewById(R.id.btnAddNew);
+        searchBtn = findViewById(R.id.btnSearch);
+        searchText = findViewById(R.id.txtSearch);
 
-        recyclerView =  findViewById(R.id.myRec);
+        recyclerView = findViewById(R.id.myRec);
         carRecyclerAdapter = new MyRecyclerAdapter(carsList, this);
         userRecyclerAdapter = new UserRecyclerAdapter(usersList, this);
+
+
         recyclerView.setAdapter(carRecyclerAdapter);
         recyclerView.setLayoutManager(new GridLayoutManager(ManagerActivity.this, 1));
 
@@ -126,6 +135,11 @@ public class ManagerActivity extends AppCompatActivity implements  ItemClickList
                     case 3:
                         searchBox.setVisibility(View.VISIBLE);
                         addNewUser.setVisibility(View.GONE);
+                        ArrayList<Car> emptyCarList = new ArrayList<>();
+                        //ArrayList<User> emptyUserList = new ArrayList<>();
+                        searchRecycleAdapterCar = new MyRecyclerAdapter(emptyCarList,ManagerActivity.this);
+                        //userRecyclerAdapter = new UserRecyclerAdapter(emptyUserList, ManagerActivity.this);
+                        recyclerView.setAdapter(searchRecycleAdapterCar);
                         break;
                 }
             }
@@ -134,6 +148,7 @@ public class ManagerActivity extends AppCompatActivity implements  ItemClickList
             public void onTabUnselected(TabLayout.Tab tab) {
 
             }
+
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
                 switch (tab.getPosition()) {
@@ -153,28 +168,28 @@ public class ManagerActivity extends AppCompatActivity implements  ItemClickList
         response = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                switch (intent.getAction()){
-                    case CarCollection.LOAD_CAR_DATA_DONE :
+                switch (intent.getAction()) {
+                    case CarCollection.LOAD_CAR_DATA_DONE:
                         //get car Data from intent
                         carsList = (ArrayList<Car>) intent.getSerializableExtra("cars_data");
                         Log.i("carlist", String.valueOf(carsList.size()));
                         carRecyclerAdapter.changeData(carsList);
                         carRecyclerAdapter.notifyDataSetChanged();
                         break;
-                    case UserCollection.LOAD_USER_LIST_DATA_DONE :
+                    case UserCollection.LOAD_USER_LIST_DATA_DONE:
                         //get user Data from intent
                         usersList = (ArrayList<User>) intent.getSerializableExtra("users_data");
                         userRecyclerAdapter.changeData(usersList);
                         userRecyclerAdapter.notifyDataSetChanged();
                         break;
-                    case CarCollection.ADD_CAR_DATA_DONE :
+                    case CarCollection.ADD_CAR_DATA_DONE:
                         //get user Data from intent
                         Car newCar = (Car) intent.getSerializableExtra("new_car_data");
                         carsList.add(newCar);
                         //carRecyclerAdapter.changeData(carsList);
                         carRecyclerAdapter.notifyDataSetChanged();
                         break;
-                    case CarCollection.UPDATE_CAR_DATA_DONE :
+                    case CarCollection.UPDATE_CAR_DATA_DONE:
 
                         carRecyclerAdapter.notifyDataSetChanged();
                         break;
@@ -182,6 +197,57 @@ public class ManagerActivity extends AppCompatActivity implements  ItemClickList
                 }
             }
         };
+
+        searchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (searchText.getText().toString().isEmpty()) {
+                    Toast.makeText(ManagerActivity.this, "Please entaer a condition", Toast.LENGTH_SHORT).show();
+                } else {
+                    ArrayList<Car> searchResult = new ArrayList<>();
+                    ArrayList<User> searchResultUser = new ArrayList<>();
+                    for (int l = 0; l < carsList.size(); l++) {
+                        Log.d("carlist",carsList.get(l).getCarMake());
+                        if (carsList.get(l).getCarId().equals(searchText.getText().toString()) ||
+                                carsList.get(l).getCategory().equals(searchText.getText().toString()) ||
+                                carsList.get(l).getCarMake().equals(searchText.getText().toString()) ||
+                                carsList.get(l).getCarModel().equals(searchText.getText().toString()) ||
+                                String.valueOf(carsList.get(l).getPricePerHour()).equals(searchText.getText().toString()) ||
+                                String.valueOf(carsList.get(l).getPricePerDay()).equals(searchText.getText().toString()) ||
+                                String.valueOf(carsList.get(l).getSeats()).equals(searchText.getText().toString()) ||
+                                carsList.get(l).getColor().toString().equals(searchText.getText().toString()) ||
+                                Boolean.toString(carsList.get(l).getAvailability()).equals(searchText.getText().toString())) {
+                            searchResult.add(carsList.get(l));
+
+                            Log.d(" IN LOOP carlist",carsList.get(l).getCarMake());
+                        }
+                    }
+                    for (int l = 0; l < usersList.size(); l++) {
+                        Log.d("userList",usersList.get(l).getFullName());
+                        if (usersList.get(l).getUserId().equals(searchText.getText().toString()) ||
+                                usersList.get(l).getFullName().equals(searchText.getText().toString()) ||
+                                String.valueOf(usersList.get(l).getRole()).equals(searchText.getText().toString()) ||
+                                usersList.get(l).getEmail().equals(searchText.getText().toString()) ||
+                                usersList.get(l).getClass().equals(searchText.getText().toString())) {
+                            searchResultUser.add(usersList.get(l));
+
+                            Log.d(" IN LOOP userList",usersList.get(l).getFullName());
+                        }
+                    }
+                    if(searchResult.isEmpty()&&searchResultUser.isEmpty()){
+                        Toast.makeText(ManagerActivity.this, "No result, please change condition", Toast.LENGTH_SHORT).show();
+                    }
+                    else if (searchResultUser.isEmpty()){
+                        searchRecycleAdapterCar = new MyRecyclerAdapter(searchResult, ManagerActivity.this);
+                        recyclerView.setAdapter(searchRecycleAdapterCar);
+                    }
+                    else if(searchResult.isEmpty()){
+                        searchRecycleAdapterUser = new UserRecyclerAdapter(searchResultUser, ManagerActivity.this);
+                        recyclerView.setAdapter((searchRecycleAdapterUser));
+                    }
+                }
+            }
+        });
 
 //Listening to any change
         final CollectionReference docRef = db.collection(COLLECTION_NAME);
@@ -206,11 +272,13 @@ public class ManagerActivity extends AppCompatActivity implements  ItemClickList
             }
         });
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -224,21 +292,23 @@ public class ManagerActivity extends AppCompatActivity implements  ItemClickList
         }
         return super.onOptionsItemSelected(item);
     }
+
     //====================Connection
     private void initialize() {
         db = FirebaseFirestore.getInstance();
         FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder().build();
         db.setFirestoreSettings(settings);
         //get all the cars
-        CarCollection.getAllCars(this,db);
+        CarCollection.getAllCars(this, db);
         //get all users
-        getAllUsers(this,db);
+        getAllUsers(this, db);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
     }
+
     @Override
     protected void onPause() {
         // Unregister since the activity is paused.
@@ -255,7 +325,7 @@ public class ManagerActivity extends AppCompatActivity implements  ItemClickList
         filter.addAction(UserCollection.LOAD_USER_LIST_DATA_DONE);
         filter.addAction(CarCollection.ADD_CAR_DATA_DONE);
         filter.addAction(CarCollection.UPDATE_CAR_DATA_DONE);
-        registerReceiver(response,filter);
+        registerReceiver(response, filter);
     }
 
     @Override
@@ -264,7 +334,7 @@ public class ManagerActivity extends AppCompatActivity implements  ItemClickList
         switch (view.getId()) {
             case R.id.carItemLayout:
                 //open PopUp
-                PopUp.openUpdateCarPopup(ManagerActivity.this, db,dialog,  clickedCar);
+                PopUp.openUpdateCarPopup(ManagerActivity.this, db, dialog, clickedCar);
                 break;
         }
 
@@ -272,7 +342,7 @@ public class ManagerActivity extends AppCompatActivity implements  ItemClickList
 
     @Override
     public void onItemLongClick(View view, int position) {
-        deleteData(carsList.get(position).getCarId(),position);
+        deleteData(carsList.get(position).getCarId(), position);
         //Toast.makeText(this, "Long clicked", Toast.LENGTH_SHORT).show();
 
         //Log.d("after delete:2",carsList.toString());
@@ -282,7 +352,7 @@ public class ManagerActivity extends AppCompatActivity implements  ItemClickList
 
     public void deleteData(String cardId, final int position) {
         UID = "";
-        db.collection("cars").whereEqualTo(key[0],cardId).get()
+        db.collection("cars").whereEqualTo(key[0], cardId).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -296,7 +366,7 @@ public class ManagerActivity extends AppCompatActivity implements  ItemClickList
                                             @Override
                                             public void onSuccess(Void aVoid) {
                                                 Log.d("Delete", "Success delete");
-                                                CarCollection.getAllCars(ManagerActivity.this,db);
+                                                CarCollection.getAllCars(ManagerActivity.this, db);
                                                 //Log.d("after delete:1",carsList.toString());
                                             }
                                         })
