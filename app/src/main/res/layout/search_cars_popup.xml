@@ -40,7 +40,9 @@
             android:textColorHint="#FFF"
             android:backgroundTint="@color/colorSecondary"
             android:layout_marginTop="10dp"
-            android:padding="20dp"/>
+            android:background="@color/gray"
+            android:layout_marginBottom="6dp"
+            android:padding="2dp"/>
         <Spinner
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -48,8 +50,10 @@
             android:hint="Color"
             android:textColor="#FFF"
             android:textColorHint="#FFF"
+            android:background="@color/gray"
+            android:layout_marginBottom="6dp"
             android:backgroundTint="@color/colorSecondary"
-            android:padding="20dp" />
+            android:padding="2dp" />
         <Spinner
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -57,8 +61,10 @@
             android:hint="Color"
             android:textColor="#FFF"
             android:textColorHint="#FFF"
+            android:background="@color/gray"
+            android:layout_marginBottom="6dp"
             android:backgroundTint="@color/colorSecondary"
-            android:padding="20dp" />
+            android:padding="2dp" />
 
         <CheckBox
             android:id="@+id/carAvailableCheckBox"

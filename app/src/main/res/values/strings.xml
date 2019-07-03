@@ -40,14 +40,13 @@
         <item>Red</item>
         <item>Green</item>
         <item>Black</item>
-        <item>Gray</item>
+        <item>Grey</item>
     </string-array>
 
     <string-array name="car_num_pas_list">
         <item>Select passenger capacity</item>
         <item>2</item>
-        <item>4</item>
-        <item>6</item>
+        <item>5</item>
         <item>7</item>
         <item>8</item>
     </string-array>
