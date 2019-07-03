@@ -121,7 +121,6 @@ public class CarCollection {
                                 if(car.getAvailability() == true){
                                     cars.add(car);
                                 }
-
                             }
                         } else {
                             Log.w("load doc", "Error getting documents.", task.getException());

@@ -49,6 +49,8 @@ public class PopUp {
         final EditText confirmPassword = dialog.findViewById(R.id.txtConfirmPassword);
         final Button btnSignUp = dialog.findViewById(R.id.btnRegister);
 
+        final Button btnSearchCars = dialog.findViewById(R.id.btnSearchCars);
+
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -166,6 +168,53 @@ public class PopUp {
                 dialog.dismiss();
             }
         });
+        dialog.show();
+    }
+
+    public static void opensearchCarPopup(final Context context, final FirebaseFirestore db, final Dialog dialog){
+        dialog.setContentView(R.layout.search_cars_popup);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+        ImageView closeBtn = dialog.findViewById(R.id.btnClose);
+        Button btnSearch = dialog.findViewById(R.id.btnSearchCars);
+
+        final Spinner carVehicleType = dialog.findViewById(R.id.carVehicleType);
+        final Spinner carNumberOfPass = dialog.findViewById(R.id.carNumPassenger);
+        final Spinner carColor = dialog.findViewById(R.id.carColorEdit);
+        final CheckBox carAvailable = dialog.findViewById(R.id.carAvailableCheckBox);
+        carAvailable.setChecked(true);
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context,
+                R.array.car_category_list, R.layout.spinner_item);
+        adapter.setDropDownViewResource(R.layout.spinner_item);
+        carVehicleType.setAdapter(adapter);
+
+        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(context,
+                R.array.car_num_pas_list, R.layout.spinner_item);
+        adapter2.setDropDownViewResource(R.layout.spinner_item);
+        carNumberOfPass.setAdapter(adapter2);
+
+        ArrayAdapter<CharSequence> adapter3 = ArrayAdapter.createFromResource(context,
+                R.array.car_color_list, R.layout.spinner_item);
+        adapter3.setDropDownViewResource(R.layout.spinner_item);
+        carColor.setAdapter(adapter3);
+
+
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+
+        closeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
         dialog.show();
     }
 

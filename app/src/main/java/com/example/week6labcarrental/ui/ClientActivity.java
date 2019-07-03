@@ -1,6 +1,7 @@
 package com.example.week6labcarrental.ui;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -24,6 +25,7 @@ import com.example.week6labcarrental.adapter.CarRecyclerAdapter;
 import com.example.week6labcarrental.adapter.ItemClickListener;
 import com.example.week6labcarrental.adapter.MyRecyclerAdapter;
 import com.example.week6labcarrental.controller.Authentication;
+import com.example.week6labcarrental.controller.PopUp;
 import com.example.week6labcarrental.firebase.CarCollection;
 import com.example.week6labcarrental.model.Car;
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,7 +39,7 @@ import java.util.Calendar;
 public class ClientActivity extends AppCompatActivity implements ItemClickListener {
 
     // buttons
-    Button btnPickup, btnContinue;
+    Button btnPickup, btnSearchCars;
     // date
     DatePickerDialog.OnDateSetListener setListener;
 
@@ -46,6 +48,9 @@ public class ClientActivity extends AppCompatActivity implements ItemClickListen
     // Firebase auth
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
+
+    Dialog dialog;
+
 
     public static final String COLLECTION_NAME = "cars";
     private final String[] key = {"carId", "category", "pricePerHour", "pricePerDay", "carMake", "carModel", "color", "availability"};
@@ -64,12 +69,13 @@ public class ClientActivity extends AppCompatActivity implements ItemClickListen
         mAuth = FirebaseAuth.getInstance();
         carsList = new ArrayList<>();
         initialize();
+        dialog = new Dialog(this);
         recyclerView =  findViewById(R.id.myRec);
         carRecyclerAdapter2 = new CarRecyclerAdapter(carsList, this);
         recyclerView.setAdapter(carRecyclerAdapter2);
         recyclerView.setLayoutManager(new GridLayoutManager(ClientActivity.this, 1));
 
-        btnContinue = findViewById(R.id.btnContinue);
+        btnSearchCars = findViewById(R.id.btnSearchCars);
         btnPickup = findViewById(R.id.btnPickup);
         txtpickup = findViewById(R.id.txtPickup);
 
@@ -105,10 +111,10 @@ public class ClientActivity extends AppCompatActivity implements ItemClickListen
         };
 
 
-        btnContinue.setOnClickListener(new View.OnClickListener() {
+        btnSearchCars.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                PopUp.opensearchCarPopup(ClientActivity.this, db, dialog);
             }
         });
 

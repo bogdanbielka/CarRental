@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/round_conner_whitebg"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_gravity="right"
+        android:id="@+id/btnClose"
+        android:background="@drawable/ic_close"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:layout_margin="30dp">
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#FFF"
+            android:textSize="24dp"
+            android:text="Search Cars"
+            android:gravity="center_horizontal"/>
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/carVehicleType"
+            android:hint="Color"
+            android:textColor="#FFF"
+            android:textColorHint="#FFF"
+            android:backgroundTint="@color/colorSecondary"
+            android:layout_marginTop="10dp"
+            android:padding="20dp"/>
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/carNumPassenger"
+            android:hint="Color"
+            android:textColor="#FFF"
+            android:textColorHint="#FFF"
+            android:backgroundTint="@color/colorSecondary"
+            android:padding="20dp" />
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/carColorEdit"
+            android:hint="Color"
+            android:textColor="#FFF"
+            android:textColorHint="#FFF"
+            android:backgroundTint="@color/colorSecondary"
+            android:padding="20dp" />
+
+        <CheckBox
+            android:id="@+id/carAvailableCheckBox"
+            android:textColor="@color/colorSecondary"
+            android:text="Available"
+            android:textSize="18sp"
+            android:layout_height="wrap_content"
+            android:layout_width="250dp"
+            android:layout_marginTop="15dp"/>
+
+        <Button
+            android:id="@+id/btnSearchCars"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="@color/colorSecondary"
+            android:text="Search"/>
+
+    </LinearLayout>
+
+</LinearLayout>
