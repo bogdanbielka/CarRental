@@ -131,14 +131,17 @@ public class ManagerActivity extends AppCompatActivity implements ItemClickListe
                     case 2:
                         searchBox.setVisibility(View.GONE);
                         addNewUser.setVisibility(View.GONE);
+
+                        //temp for clean the recycleview, needs update
+                        ArrayList<Car> emptyCarList2 = new ArrayList<>();
+                        searchRecycleAdapterCar = new MyRecyclerAdapter(emptyCarList2,ManagerActivity.this);
+                        recyclerView.setAdapter(searchRecycleAdapterCar);
                         break;
                     case 3:
                         searchBox.setVisibility(View.VISIBLE);
                         addNewUser.setVisibility(View.GONE);
                         ArrayList<Car> emptyCarList = new ArrayList<>();
-                        //ArrayList<User> emptyUserList = new ArrayList<>();
                         searchRecycleAdapterCar = new MyRecyclerAdapter(emptyCarList,ManagerActivity.this);
-                        //userRecyclerAdapter = new UserRecyclerAdapter(emptyUserList, ManagerActivity.this);
                         recyclerView.setAdapter(searchRecycleAdapterCar);
                         break;
                 }
