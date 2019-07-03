@@ -79,10 +79,15 @@ public class ManagerActivity extends AppCompatActivity implements  ItemClickList
     //Recycler View
     RecyclerView recyclerView;
     MyRecyclerAdapter carRecyclerAdapter;
+    MyRecyclerAdapter searchRecycleAdapterCar;
     UserRecyclerAdapter userRecyclerAdapter;
+    UserRecyclerAdapter searchRecycleAdapterUser;
     ItemClickListener itemClickListener;
 
     Button addNewUser;
+    Button searchBtn;
+    EditText searchText;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,6 +100,8 @@ public class ManagerActivity extends AppCompatActivity implements  ItemClickList
 
         searchBox = findViewById(R.id.searchBox);
         addNewUser = findViewById(R.id.btnAddNew);
+        searchBtn = findViewById(R.id.btnSearch);
+        searchText = findViewById(R.id.txtSearch);
 
         recyclerView =  findViewById(R.id.myRec);
         carRecyclerAdapter = new MyRecyclerAdapter(carsList, this);
@@ -122,10 +129,17 @@ public class ManagerActivity extends AppCompatActivity implements  ItemClickList
                     case 2:
                         searchBox.setVisibility(View.GONE);
                         addNewUser.setVisibility(View.GONE);
+                        //temp for clean the recycleview, needs update
+                        ArrayList<Car> emptyCarList2 = new ArrayList<>();
+                        searchRecycleAdapterCar = new MyRecyclerAdapter(emptyCarList2,ManagerActivity.this);
+                        recyclerView.setAdapter(searchRecycleAdapterCar);
                         break;
                     case 3:
                         searchBox.setVisibility(View.VISIBLE);
                         addNewUser.setVisibility(View.GONE);
+                        ArrayList<Car> emptyCarList = new ArrayList<>();
+                        searchRecycleAdapterCar = new MyRecyclerAdapter(emptyCarList,ManagerActivity.this);
+                        recyclerView.setAdapter(searchRecycleAdapterCar);
                         break;
                 }
             }
@@ -182,6 +196,59 @@ public class ManagerActivity extends AppCompatActivity implements  ItemClickList
                 }
             }
         };
+
+        searchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (searchText.getText().toString().isEmpty()) {
+                    Toast.makeText(ManagerActivity.this, "Please entaer a condition", Toast.LENGTH_SHORT).show();
+                } else {
+                    ArrayList<Car> searchResult = new ArrayList<>();
+                    ArrayList<User> searchResultUser = new ArrayList<>();
+                    for (int l = 0; l < carsList.size(); l++) {
+                        Log.d("carlist",carsList.get(l).getCarMake());
+                        if (carsList.get(l).getCarId().equals(searchText.getText().toString()) ||
+                                carsList.get(l).getCategory().equals(searchText.getText().toString()) ||
+                                carsList.get(l).getCarMake().equals(searchText.getText().toString()) ||
+                                carsList.get(l).getCarModel().equals(searchText.getText().toString()) ||
+                                String.valueOf(carsList.get(l).getPricePerHour()).equals(searchText.getText().toString()) ||
+                                String.valueOf(carsList.get(l).getPricePerDay()).equals(searchText.getText().toString()) ||
+                                String.valueOf(carsList.get(l).getSeats()).equals(searchText.getText().toString()) ||
+                                carsList.get(l).getColor().toString().equals(searchText.getText().toString()) ||
+                                Boolean.toString(carsList.get(l).getAvailability()).equals(searchText.getText().toString())) {
+                            searchResult.add(carsList.get(l));
+
+                            Log.d(" IN LOOP carlist",carsList.get(l).getCarMake());
+                        }
+                    }
+                    for (int l = 0; l < usersList.size(); l++) {
+                        Log.d("userList",usersList.get(l).getFullName());
+                        if (usersList.get(l).getUserId().equals(searchText.getText().toString()) ||
+                                usersList.get(l).getFullName().equals(searchText.getText().toString()) ||
+                                String.valueOf(usersList.get(l).getRole()).equals(searchText.getText().toString()) ||
+                                usersList.get(l).getEmail().equals(searchText.getText().toString()) ||
+                                usersList.get(l).getClass().equals(searchText.getText().toString())) {
+                            searchResultUser.add(usersList.get(l));
+
+                            Log.d(" IN LOOP userList",usersList.get(l).getFullName());
+                        }
+                    }
+                    if(searchResult.isEmpty()&&searchResultUser.isEmpty()){
+                        Toast.makeText(ManagerActivity.this, "No result, please change condition", Toast.LENGTH_SHORT).show();
+                        searchRecycleAdapterCar = new MyRecyclerAdapter(searchResult, ManagerActivity.this);
+                        recyclerView.setAdapter(searchRecycleAdapterCar);
+                    }
+                    else if (searchResultUser.isEmpty()){
+                        searchRecycleAdapterCar = new MyRecyclerAdapter(searchResult, ManagerActivity.this);
+                        recyclerView.setAdapter(searchRecycleAdapterCar);
+                    }
+                    else if(searchResult.isEmpty()){
+                        searchRecycleAdapterUser = new UserRecyclerAdapter(searchResultUser, ManagerActivity.this);
+                        recyclerView.setAdapter((searchRecycleAdapterUser));
+                    }
+                }
+            }
+        });
 
 //Listening to any change
         final CollectionReference docRef = db.collection(COLLECTION_NAME);
