@@ -2,6 +2,7 @@ package com.example.week6labcarrental.adapter;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,7 +58,7 @@ public class CarRecyclerAdapter extends RecyclerView.Adapter<CarRecyclerAdapter.
         this.mData = data;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
         TextView category, carMake, carModel, carPriceDay, seats, availability, color;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -68,6 +69,19 @@ public class CarRecyclerAdapter extends RecyclerView.Adapter<CarRecyclerAdapter.
             seats = itemView.findViewById(R.id.txtSeatsInfo);
             availability = itemView.findViewById(R.id.txtAvailableInfo);
             color = itemView.findViewById(R.id.txtColorInfo);
+
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
+            Log.d("TAG","View: Clicked!");
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            return false;
         }
     }
 }

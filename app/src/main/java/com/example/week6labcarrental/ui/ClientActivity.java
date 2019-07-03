@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +20,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.week6labcarrental.R;
 import com.example.week6labcarrental.adapter.CarRecyclerAdapter;
@@ -37,20 +39,18 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class ClientActivity extends AppCompatActivity implements ItemClickListener {
-
     // buttons
-    Button btnPickup, btnSearchCars;
+    private Button btnPickup, btnSearchCars;
     // date
     DatePickerDialog.OnDateSetListener setListener;
 
-    TextView txtpickup, txtreturn;
-    String pickupdate, returndate; // serves as holder for the dates
+    TextView txtpickup;
+    String pickupdate = ""; // serves as holder for the dates
     // Firebase auth
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
 
     Dialog dialog;
-
 
     public static final String COLLECTION_NAME = "cars";
     private final String[] key = {"carId", "category", "pricePerHour", "pricePerDay", "carMake", "carModel", "color", "availability"};
@@ -84,6 +84,9 @@ public class ClientActivity extends AppCompatActivity implements ItemClickListen
         final int month = c.get(Calendar.MONTH);
         final int day = c.get(Calendar.DAY_OF_MONTH);
 
+        final String PREF_NAME = "MyPrefsFile";
+        final SharedPreferences.Editor editor = getSharedPreferences(PREF_NAME, MODE_PRIVATE).edit();
+
         btnPickup.setOnClickListener(new View.OnClickListener() {
             Calendar cal = Calendar.getInstance();
             @Override
@@ -96,6 +99,9 @@ public class ClientActivity extends AppCompatActivity implements ItemClickListen
                         String date = day + "/" + month + "/" + year;
                         pickupdate = date;
                         txtpickup.setText(date);
+
+                        editor.putString("PickUpDate", date);
+                        editor.apply();
                     }
                 }, year, month, day);
                 datePickerDialog.getDatePicker().setMinDate(cal.getTimeInMillis());
@@ -187,10 +193,17 @@ public class ClientActivity extends AppCompatActivity implements ItemClickListen
 
     @Override
     public void onItemClick(View view, int position) {
-        Car clickedCar = carsList.get(position);
-        Intent i = new Intent(this,sale2.class);
-        i.putExtra("car",clickedCar);
-        startActivity(i);
+        if(pickupdate == ""){
+            Toast.makeText(this,"Please Pick A Date", Toast.LENGTH_SHORT).show();
+        }else {
+            Car clickedCar = carsList.get(position);
+            Intent i = new Intent(this, ReservationActivity.class);
+            i.putExtra("carMake", clickedCar.getCarMake());
+            i.putExtra("carModel", clickedCar.getCarModel());
+            i.putExtra("carColor", clickedCar.getColor());
+            i.putExtra("carPrice", clickedCar.getPricePerDay());
+            startActivity(i);
+        }
     }
 
     @Override
