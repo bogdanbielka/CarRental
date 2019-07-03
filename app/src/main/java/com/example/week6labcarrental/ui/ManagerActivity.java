@@ -59,7 +59,7 @@ import static com.example.week6labcarrental.firebase.UserCollection.getAllUsers;
 
 public class ManagerActivity extends AppCompatActivity implements  ItemClickListener {
     //declarations
-    private FirebaseFirestore db;
+    private FirebaseFirestore db ;
     public static final String COLLECTION_NAME = "cars";
     private final String Tag = "ManagerActivity";
     //In CarData.json file, availability spelling wrong as "availibility"

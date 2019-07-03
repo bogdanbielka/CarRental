@@ -15,7 +15,7 @@
         android:textSize="24sp" />
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/txtName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -30,7 +30,7 @@
         android:textSize="24sp" />
 
     <EditText
-        android:id="@+id/editText3"
+        android:id="@+id/txtDriverLicense"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -45,7 +45,7 @@
         android:textSize="24sp" />
 
     <EditText
-        android:id="@+id/editText4"
+        android:id="@+id/txtDeposit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -60,38 +60,23 @@
         android:textSize="24sp" />
 
     <TextView
-        android:id="@+id/textView4"
-        android:layout_width="379dp"
-        android:layout_height="77dp"
-        android:text="Total : "
-        android:textAlignment="textStart"
-        android:textSize="30sp"
-        android:textStyle="bold" />
+        android:id="@+id/txtDate"
+        android:layout_width="382dp"
+        android:layout_height="68dp"
+        android:textSize="24sp" />
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <Button
-            android:id="@+id/btnCalc"
-            android:layout_width="0dp"
-            android:layout_height="77dp"
-            android:layout_marginTop="100dp"
-            android:layout_marginEnd="78dp"
-            android:text="Calculate Total"
-            app:layout_constraintEnd_toStartOf="@+id/btnBook"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
             android:id="@+id/btnBook"
-            android:layout_width="0dp"
-            android:layout_height="71dp"
-            android:layout_marginTop="100dp"
-            android:layout_marginEnd="67dp"
+            android:layout_width="118dp"
+            android:layout_height="53dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="276dp"
             android:text="Book"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/btnCalc"
             app:layout_constraintTop_toTopOf="parent" />
     </android.support.constraint.ConstraintLayout>
 

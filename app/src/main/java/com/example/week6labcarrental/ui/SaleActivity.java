@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -46,6 +47,7 @@ public class SaleActivity extends AppCompatActivity implements ItemClickListener
     RecyclerView recyclerView;
     MyRecyclerAdapter carRecyclerAdapter;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,9 +62,11 @@ public class SaleActivity extends AppCompatActivity implements ItemClickListener
         final int month = c.get(Calendar.MONTH);
         final int day = c.get(Calendar.DAY_OF_MONTH);
         Button btnPickup = findViewById(R.id.btnPickup);
-        Button btnReturn = findViewById(R.id.btnReturn);
+        //Button btnReturn = findViewById(R.id.btnReturn);
         final TextView txtpickup = findViewById(R.id.txtPickup);
-        final TextView txtreturn = findViewById(R.id.txtReturn);
+        //final TextView txtreturn = findViewById(R.id.txtReturn);
+        final String MY_PREFS_NAME = "MyPrefsFile";
+        final SharedPreferences.Editor editor = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
 
         btnPickup.setOnClickListener(new View.OnClickListener() {
             Calendar cal = Calendar.getInstance();
@@ -76,6 +80,9 @@ public class SaleActivity extends AppCompatActivity implements ItemClickListener
                         String date = day + "/" + month + "/" + year;
                         pickupdate = date;
                         txtpickup.setText(date);
+                        //i.putExtra("datePickup",date);
+                        editor.putString("datePickup",date);
+                        editor.apply();
                     }
                 }, year, month, day);
                 datePickerDialog.getDatePicker().setMinDate(cal.getTimeInMillis());
@@ -83,7 +90,7 @@ public class SaleActivity extends AppCompatActivity implements ItemClickListener
             }
         });
 
-        btnReturn.setOnClickListener(new View.OnClickListener() {
+        /*btnReturn.setOnClickListener(new View.OnClickListener() {
             Calendar cal = Calendar.getInstance();
             @Override
             public void onClick(View v) {
@@ -95,12 +102,15 @@ public class SaleActivity extends AppCompatActivity implements ItemClickListener
                         String date = day + "/" + month + "/" + year;
                         pickupdate = date;
                         txtreturn.setText(date);
+                        //i.putExtra("dateReturn",date);
+                        editor.putString("dateReturn",date);
+                        editor.apply();
                     }
                 }, year, month, day);
                 datePickerDialog.getDatePicker().setMinDate(cal.getTimeInMillis());
                 datePickerDialog.show();
             }
-        });
+        });*/
 
         recyclerView =  findViewById(R.id.myRec);
         carRecyclerAdapter = new MyRecyclerAdapter(carsList, this);
